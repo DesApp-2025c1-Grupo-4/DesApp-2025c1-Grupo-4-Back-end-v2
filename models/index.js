@@ -1,4 +1,4 @@
-const Empresa = requiere('./empresa')
+const Empresa = require('./empresa')
 
 module.exports = {
     Empresa

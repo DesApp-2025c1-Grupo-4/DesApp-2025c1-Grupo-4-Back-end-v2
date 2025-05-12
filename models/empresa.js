@@ -3,20 +3,20 @@ const {Schema} = require('mongoose')
 
 const empresaSchema = new mongoose.Schema({
     cuit: {
-        type: Schema.Types.Int32,
-        require: true
+        type: Schema.Types.BigInt,
+        required: true
     },
     razonSocial: {
         type: Schema.Types.String,
-        require: true
+        required: true
     },
     domicilio: {
         type: Schema.Types.String,
-        require: true
+        required: true
     },
     contacto: {
-        type: Schema.type.Int32,
-        require: true
+        type: Schema.Types.BigInt,
+        required: true
     }
 })
 
