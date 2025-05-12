@@ -1,11 +1,14 @@
 const {Empresa} = require('../models');
 const {Chofer} = require('../models');
 const {Vehiculo} = require('../models');
+const {Localizacion} = require('../models')
+
 async function seedDatabase() {
     try {
         await Empresa.deleteMany({});
         await Chofer.deleteMany({});
         await Vehiculo.deleteMany({});
+        await Localizacion.deleteMany({});
         
         const empresas = await Empresa.insertMany([
             { cuit: "30456789451", razonSocial: "Arcor", domicilio: "Arena3655",contacto: "123456789"},
@@ -19,7 +22,10 @@ async function seedDatabase() {
             { patente: "ABC123", marca: "Renault", modelo: "A1",año: "2022",volumen: 75.30, peso: 40000, tipoVehiculo: "Camión"},
             { patente: "JKL8956", marca: "Mercedes", modelo: "Z5",año: "2023",volumen: 5.80, peso: 15000, tipoVehiculo: "Auto"}
         ]);
-
+        const localizaciones = await Localizacion.insertMany([
+            { calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
+            { calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
+        ])
 
         console.log("Base de datos poblada con éxito");
 
