@@ -18,7 +18,8 @@ const choferSchema = new mongoose.Schema({
         type: Schema.Types.Date,
         required: true
     },
-    empresas: [{type: Schema.Types.ObjectId, ref: 'Empresa'}]
+    empresas: [{type: Schema.Types.ObjectId, ref: 'Empresa'}],
+    asignaciones: [{type: Schema.Types.ObjectId, ref: 'Asignacion'}]
 })
 
 choferSchema.set('toJSON', {
