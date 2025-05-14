@@ -14,7 +14,8 @@ const viajeSchema = new mongoose.Schema({
     estado: {
         type: Schema.Types.String,
         required: true
-    }
+    },
+    localizaciones: [{type: Schema.Types.ObjectId, ref: 'Localizacion'}]
 })
 
 viajeSchema.set('toJSON', {

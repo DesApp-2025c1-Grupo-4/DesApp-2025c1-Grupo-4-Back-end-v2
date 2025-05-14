@@ -34,8 +34,8 @@ async function seedDatabase() {
             { patente: "JKL8956", marca: "Mercedes", modelo: "Z5",año: "2023",volumen: 5.80, peso: 15000, tipoVehiculo: "Auto", asignaciones:[]}
         ]);
         const localizaciones = await Localizacion.insertMany([
-            { calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina", depositos: []},
-            { calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile", depositos: []}
+            { calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina", depositos: [], viajes: []},
+            { calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile", depositos: [], viajes: []}
         ]);
         const depositos = await Deposito.insertMany([
             { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596", localizaciones: []},
@@ -46,8 +46,8 @@ async function seedDatabase() {
             { cuilChofer: "20456789452", patenteVehiculo: "JKL8956", fechaAsignacion: new Date(2025, 4, 20),vehiculoPropio: false, choferes:[], vehiculos:[]}
         ]);
         const viajes = await Viaje.insertMany([
-            { inicioViaje: new Date(2025, 5, 16, 15, 20), llegadaViaje: new Date(2025, 5, 16, 16, 20), estado:"Planificado"},
-            { inicioViaje: new Date(2025, 5, 16, 14, 30), llegadaViaje: new Date(2025, 5, 16, 15, 20), estado:"Cancelado"}
+            { inicioViaje: new Date(2025, 5, 16, 15, 20), llegadaViaje: new Date(2025, 5, 16, 16, 20), estado:"Planificado", localizaciones: []},
+            { inicioViaje: new Date(2025, 5, 16, 14, 30), llegadaViaje: new Date(2025, 5, 16, 15, 20), estado:"Cancelado", localizaciones: []}
         ])
 
         // Actualizar choferes de empresa
@@ -101,6 +101,18 @@ async function seedDatabase() {
         asignaciones[1].vehiculos.push(vehiculos[1]._id);
         await asignaciones[0].save();
         await asignaciones[1].save();
+
+        // Actualizar localizaciones de viajes
+        viajes[0].localizaciones.push(localizaciones[0]._id);
+        viajes[1].localizaciones.push(localizaciones[1]._id);
+        await viajes[0].save();
+        await viajes[1].save();
+
+        // Actualizar viajes de localizaciones
+        localizaciones[0].viajes.push(viajes[0]._id);
+        localizaciones[1].viajes.push(viajes[1]._id);
+        await localizaciones[0].save();
+        await localizaciones[1].save();
 
 
         console.log("Base de datos poblada con éxito");
