@@ -17,7 +17,8 @@ const choferSchema = new mongoose.Schema({
     fechaNacimiento: {
         type: Schema.Types.Date,
         required: true
-    }
+    },
+    empresas: [{type: Schema.Types.ObjectId, ref: 'Empresa'}]
 })
 
 choferSchema.set('toJSON', {

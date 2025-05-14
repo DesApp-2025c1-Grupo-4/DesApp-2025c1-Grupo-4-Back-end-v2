@@ -17,7 +17,9 @@ const empresaSchema = new mongoose.Schema({
     contacto: {
         type: Schema.Types.BigInt,
         required: true
-    }
+    },
+    choferes: [{type: Schema.Types.ObjectId, ref: 'Chofer'}]
+
 })
 
 empresaSchema.set('toJSON', {

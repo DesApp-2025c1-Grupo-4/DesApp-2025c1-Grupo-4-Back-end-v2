@@ -17,12 +17,12 @@ async function seedDatabase() {
         await Viaje.deleteMany({});
         
         const empresas = await Empresa.insertMany([
-            { cuit: "30456789451", razonSocial: "Arcor", domicilio: "Arena3655",contacto: "123456789"},
-            { cuit: "30456789452", razonSocial: "Techin", domicilio: "Arena3654",contacto: "123456790"}
+            { cuit: "30456789451", razonSocial: "Arcor", domicilio: "Arena3655",contacto: "123456789", choferes:[]},
+            { cuit: "30456789452", razonSocial: "Techin", domicilio: "Arena3654",contacto: "123456790", choferes:[]}
         ]);
         const choferes = await Chofer.insertMany([
-            { cuil: "27456789451", apellido: "Torres", nombre: "Marcelo",contacto: "153456789",fechaNacimiento: new Date(1988, 2, 6)},
-            { cuil: "20456789452", apellido: "Herenu", nombre: "Luis",contacto: "153456790",fechaNacimiento: new Date(1988, 3, 6)}
+            { cuil: "27456789451", apellido: "Torres", nombre: "Marcelo",contacto: "153456789",fechaNacimiento: new Date(1988, 2, 6), empresas:[]},
+            { cuil: "20456789452", apellido: "Herenu", nombre: "Luis",contacto: "153456790",fechaNacimiento: new Date(1988, 3, 6), empresas:[]}
         ]);
         const vehiculos = await Vehiculo.insertMany([
             { patente: "ABC123", marca: "Renault", modelo: "A1",año: "2022",volumen: 75.30, peso: 40000, tipoVehiculo: "Camión"},
@@ -44,6 +44,21 @@ async function seedDatabase() {
             { inicioViaje: new Date(2025, 5, 16, 15, 20), llegadaViaje: new Date(2025, 5, 16, 16, 20), estado:"Planificado"},
             { inicioViaje: new Date(2025, 5, 16, 14, 30), llegadaViaje: new Date(2025, 5, 16, 15, 20), estado:"Cancelado"}
         ])
+
+        // Actualizar choferes de empresa
+
+        empresas[0].choferes.push(choferes[0]._id);
+        empresas[1].choferes.push(choferes[1]._id);
+        await empresas[0].save();
+        await empresas[1].save();
+
+        // Actualizar empresas de choferes
+
+        choferes[0].empresas.push(empresas[0]._id);
+        choferes[1].empresas.push(empresas[1]._id);
+        await choferes[0].save();
+        await choferes[1].save();
+
 
         console.log("Base de datos poblada con éxito");
 
