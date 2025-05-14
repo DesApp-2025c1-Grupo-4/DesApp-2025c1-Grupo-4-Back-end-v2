@@ -29,7 +29,8 @@ const vehiculoSchema = new mongoose.Schema({
     tipoVehiculo: {
         type: Schema.Types.String,
         required: true
-    }
+    },
+    asignaciones: [{type: Schema.Types.ObjectId, ref: 'Asignacion'}]
 })
 
 vehiculoSchema.set('toJSON', {

@@ -18,7 +18,8 @@ const asignacionSchema = new mongoose.Schema({
         type: Schema.Types.Boolean,
         required: true
     },
-    choferes: [{type: Schema.Types.ObjectId, ref: 'Chofer'}]
+    choferes: [{type: Schema.Types.ObjectId, ref: 'Chofer'}],
+    vehiculos: [{type: Schema.Types.ObjectId, ref: 'Vehiculo'}]
 })
 
 asignacionSchema.set('toJSON', {

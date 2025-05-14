@@ -30,8 +30,8 @@ async function seedDatabase() {
             { cuil: "20456789452", apellido: "Herenu", nombre: "Luis",contacto: "153456790",fechaNacimiento: new Date(1988, 3, 6), empresas:[], asignaciones:[]}
         ]);
         const vehiculos = await Vehiculo.insertMany([
-            { patente: "ABC123", marca: "Renault", modelo: "A1",año: "2022",volumen: 75.30, peso: 40000, tipoVehiculo: "Camión"},
-            { patente: "JKL8956", marca: "Mercedes", modelo: "Z5",año: "2023",volumen: 5.80, peso: 15000, tipoVehiculo: "Auto"}
+            { patente: "ABC123", marca: "Renault", modelo: "A1",año: "2022",volumen: 75.30, peso: 40000, tipoVehiculo: "Camión", asignaciones:[]},
+            { patente: "JKL8956", marca: "Mercedes", modelo: "Z5",año: "2023",volumen: 5.80, peso: 15000, tipoVehiculo: "Auto", asignaciones:[]}
         ]);
         const localizaciones = await Localizacion.insertMany([
             { calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina", depositos: []},
@@ -42,8 +42,8 @@ async function seedDatabase() {
             { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296", localizaciones: []}
         ]);
         const asignaciones = await Asignacion.insertMany([
-            { cuilChofer: "27456789451", patenteVehiculo: "ABC123", fechaAsignacion:  new Date(2025, 5, 16), vehiculoPropio: true, choferes:[]},
-            { cuilChofer: "20456789452", patenteVehiculo: "JKL8956", fechaAsignacion: new Date(2025, 4, 20),vehiculoPropio: false, choferes:[]}
+            { cuilChofer: "27456789451", patenteVehiculo: "ABC123", fechaAsignacion:  new Date(2025, 5, 16), vehiculoPropio: true, choferes:[], vehiculos:[]},
+            { cuilChofer: "20456789452", patenteVehiculo: "JKL8956", fechaAsignacion: new Date(2025, 4, 20),vehiculoPropio: false, choferes:[], vehiculos:[]}
         ]);
         const viajes = await Viaje.insertMany([
             { inicioViaje: new Date(2025, 5, 16, 15, 20), llegadaViaje: new Date(2025, 5, 16, 16, 20), estado:"Planificado"},
@@ -89,6 +89,19 @@ async function seedDatabase() {
         choferes[1].asignaciones.push(asignaciones[1]._id);
         await choferes[0].save();
         await choferes[1].save();
+
+        // Actualizar asignaciones de vehiculos
+        vehiculos[0].asignaciones.push(asignaciones[0]._id);
+        vehiculos[1].asignaciones.push(asignaciones[1]._id);
+        await vehiculos[0].save();
+        await vehiculos[1].save();
+
+        // Actualizar vehiculos de asignaciones
+        asignaciones[0].vehiculos.push(vehiculos[0]._id);
+        asignaciones[1].vehiculos.push(vehiculos[1]._id);
+        await asignaciones[0].save();
+        await asignaciones[1].save();
+
 
         console.log("Base de datos poblada con éxito");
 
