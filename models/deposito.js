@@ -5,7 +5,7 @@ const depositoSchema = new mongoose.Schema({
     IDLocalizacion: {
         type: Schema.Types.ObjectId,
         ref: 'Localizacion',
-        required: false
+        required: true
     },
     tipo: {
         type: Schema.Types.String,

@@ -3,6 +3,7 @@ const {Chofer} = require('../models');
 const {Vehiculo} = require('../models');
 const {Localizacion} = require('../models');
 const {Deposito} = require('../models');
+const {Asignacion} = require('../models');
 
 async function seedDatabase() {
     try {
@@ -11,6 +12,7 @@ async function seedDatabase() {
         await Vehiculo.deleteMany({});
         await Localizacion.deleteMany({});
         await Deposito.deleteMany({});
+        await Asignacion.deleteMany({});
         
         const empresas = await Empresa.insertMany([
             { cuit: "30456789451", razonSocial: "Arcor", domicilio: "Arena3655",contacto: "123456789"},
@@ -31,6 +33,10 @@ async function seedDatabase() {
         const depositos = await Deposito.insertMany([
             { IDLocalizacion: '6823e33f55e876a72e7340bb', tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596"},
             { IDLocalizacion: '6823e3cc3f3e9f8d3decdaf7', tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296"}
+        ]);
+        const asignaciones = await Asignacion.insertMany([
+            { cuilChofer: "27456789451", patenteVehiculo: "ABC123", fechaAsignacion:  new Date(2025, 5, 16), vehiculoPropio: true},
+            { cuilChofer: "20456789452", patenteVehiculo: "JKL8956", fechaAsignacion: new Date(2025, 4, 20),vehiculoPropio: false}
         ])
 
         console.log("Base de datos poblada con éxito");
