@@ -29,12 +29,12 @@ async function seedDatabase() {
             { patente: "JKL8956", marca: "Mercedes", modelo: "Z5",año: "2023",volumen: 5.80, peso: 15000, tipoVehiculo: "Auto"}
         ]);
         const localizaciones = await Localizacion.insertMany([
-            { calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
-            { calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
+            { calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina", depositos: []},
+            { calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile", depositos: []}
         ]);
         const depositos = await Deposito.insertMany([
-            { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596"},
-            { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296"}
+            { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596", localizaciones: []},
+            { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296", localizaciones: []}
         ]);
         const asignaciones = await Asignacion.insertMany([
             { cuilChofer: "27456789451", patenteVehiculo: "ABC123", fechaAsignacion:  new Date(2025, 5, 16), vehiculoPropio: true},
@@ -59,6 +59,19 @@ async function seedDatabase() {
         await choferes[0].save();
         await choferes[1].save();
 
+        // Actualizar localizaciones de depositos
+
+        depositos[0].localizaciones.push(localizaciones[0]._id);
+        depositos[1].localizaciones.push(localizaciones[1]._id);
+        await depositos[0].save();
+        await depositos[1].save();
+
+        // Actualizar  depositos de localizaciones 
+
+        localizaciones[0].depositos.push(depositos[0]._id);
+        localizaciones[1].depositos.push(depositos[1]._id);
+        await localizaciones[0].save();
+        await localizaciones[1].save();
 
         console.log("Base de datos poblada con éxito");
 

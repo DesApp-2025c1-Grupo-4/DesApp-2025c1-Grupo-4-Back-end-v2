@@ -13,7 +13,8 @@ const depositoSchema = new mongoose.Schema({
     contacto: {
         type: Schema.Types.BigInt,
         required: true
-    }
+    },
+    localizaciones: [{type: Schema.Types.ObjectId, ref: 'Localizacion'}]
 })
 
 depositoSchema.set('toJSON', {
