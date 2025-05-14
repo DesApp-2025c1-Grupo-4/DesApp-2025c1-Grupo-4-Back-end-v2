@@ -4,6 +4,7 @@ const Vehiculo = require('./vehiculo')
 const Localizacion = require('./localizacion')
 const Deposito = require('./deposito')
 const Asignacion = require('./asignacion')
+const Viaje = require('./viaje')
 
 module.exports = {
     Empresa,
@@ -11,5 +12,6 @@ module.exports = {
     Vehiculo,
     Localizacion,
     Deposito,
-    Asignacion
+    Asignacion,
+    Viaje
 }

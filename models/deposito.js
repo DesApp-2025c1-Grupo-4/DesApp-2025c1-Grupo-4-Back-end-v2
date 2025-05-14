@@ -2,11 +2,6 @@ const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
 
 const depositoSchema = new mongoose.Schema({
-    IDLocalizacion: {
-        type: Schema.Types.ObjectId,
-        ref: 'Localizacion',
-        required: true
-    },
     tipo: {
         type: Schema.Types.String,
         required: true
