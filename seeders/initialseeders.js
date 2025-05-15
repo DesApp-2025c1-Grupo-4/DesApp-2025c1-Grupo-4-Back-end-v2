@@ -42,12 +42,12 @@ async function seedDatabase() {
             { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296", localizaciones: []}
         ]);
         const asignaciones = await Asignacion.insertMany([
-            { cuilChofer: "27456789451", patenteVehiculo: "ABC123", fechaAsignacion:  new Date(2025, 5, 16), vehiculoPropio: true, choferes:[], vehiculos:[]},
-            { cuilChofer: "20456789452", patenteVehiculo: "JKL8956", fechaAsignacion: new Date(2025, 4, 20),vehiculoPropio: false, choferes:[], vehiculos:[]}
+            { cuilChofer: "27456789451", patenteVehiculo: "ABC123", fechaAsignacion:  new Date(2025, 5, 16), vehiculoPropio: true, choferes:[], vehiculos:[], viajes:[]},
+            { cuilChofer: "20456789452", patenteVehiculo: "JKL8956", fechaAsignacion: new Date(2025, 4, 20), vehiculoPropio: false, choferes:[], vehiculos:[], viajes:[]}
         ]);
         const viajes = await Viaje.insertMany([
-            { inicioViaje: new Date(2025, 5, 16, 15, 20), llegadaViaje: new Date(2025, 5, 16, 16, 20), estado:"Planificado", localizaciones: []},
-            { inicioViaje: new Date(2025, 5, 16, 14, 30), llegadaViaje: new Date(2025, 5, 16, 15, 20), estado:"Cancelado", localizaciones: []}
+            { inicioViaje: new Date(2025, 5, 16, 15, 20), llegadaViaje: new Date(2025, 5, 16, 16, 20), estado:"Planificado", localizaciones: [], asignaciones:[]},
+            { inicioViaje: new Date(2025, 5, 16, 14, 30), llegadaViaje: new Date(2025, 5, 16, 15, 20), estado:"Cancelado", localizaciones: [], asignaciones:[]}
         ])
 
         // Actualizar choferes de empresa
@@ -113,6 +113,18 @@ async function seedDatabase() {
         localizaciones[1].viajes.push(viajes[1]._id);
         await localizaciones[0].save();
         await localizaciones[1].save();
+
+        // Actualizar asignaciones de viajes
+        viajes[0].asignaciones.push(asignaciones[0]._id);
+        viajes[1].asignaciones.push(asignaciones[1]._id);
+        await viajes[0].save();
+        await viajes[1].save();
+
+        // Actualizar viajes de asignaciones
+        asignaciones[0].viajes.push(viajes[0]._id);
+        asignaciones[1].viajes.push(viajes[1]._id);
+        await asignaciones[0].save();
+        await asignaciones[1].save();
 
 
         console.log("Base de datos poblada con éxito");
