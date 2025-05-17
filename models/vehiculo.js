@@ -29,13 +29,14 @@ const vehiculoSchema = new mongoose.Schema({
     tipoVehiculo: {
         type: Schema.Types.String,
         required: true
-    },
-    asignaciones: [{type: Schema.Types.ObjectId, ref: 'Asignacion'}]
+    }
+},{
+  collection: 'Vehiculo', // Especifica el nombre en singular
 })
 
 vehiculoSchema.set('toJSON', {
     transform: (_, ret) => {
-        delete ret._v
+        delete ret.__v
     }
 })
 

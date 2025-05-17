@@ -18,13 +18,15 @@ const choferSchema = new mongoose.Schema({
         type: Schema.Types.Date,
         required: true
     },
-    empresas: [{type: Schema.Types.ObjectId, ref: 'Empresa'}],
+    empresa: {type: Schema.Types.ObjectId, ref: 'Empresa'},
     asignaciones: [{type: Schema.Types.ObjectId, ref: 'Asignacion'}]
+},{
+  collection: 'Chofer', // Especifica el nombre en singular
 })
 
 choferSchema.set('toJSON', {
     transform: (_, ret) => {
-        delete ret._v,
+        delete ret.__v,
         delete ret_id
     }
 })
