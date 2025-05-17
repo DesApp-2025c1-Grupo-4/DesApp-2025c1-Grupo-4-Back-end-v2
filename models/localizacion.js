@@ -25,9 +25,9 @@ const localizacionSchema = new mongoose.Schema({
     país: {
         type: Schema.Types.String,
         required: true
-    },
-    depositos: [{type: Schema.Types.ObjectId, ref: 'Deposito'}],
-    viajes: [{type: Schema.Types.ObjectId, ref: 'Viaje'}]
+    }
+},{
+  collection: 'Localizacion', // Especifica el nombre en singular
 })
 
 localizacionSchema.set('toJSON', {

@@ -15,19 +15,16 @@ const viajeSchema = new mongoose.Schema({
         type: Schema.Types.String,
         required: true
     },
-    localizaciones: [{type: Schema.Types.ObjectId, ref: 'Localizacion'}],
-    asignaciones: [{type: Schema.Types.ObjectId, ref: 'Asignacion'}]
+    depositoOrigen: {type: Schema.Types.ObjectId, ref: 'Deposito'},
+    depositoDestino: {type: Schema.Types.ObjectId, ref: 'Deposito'},
+    asignacion: {type: Schema.Types.ObjectId, ref: 'Asignacion'}
+},{
+  collection: 'Viaje', // Especifica el nombre en singular
 })
 
 viajeSchema.set('toJSON', {
     transform: (_, ret) => {
-        if (ret.inicioViaje) {
-            ret.inicioViaje = DateTime.fromJSDate(ret.inicioViaje)
-                .setZone("America/Argentina/Buenos_Aires")
-                .toFormat("yyyy-MM-dd HH:mm:ss")
-                .toISO();
-        }
-        delete ret._v
+        delete ret.__v
     }
 })
 

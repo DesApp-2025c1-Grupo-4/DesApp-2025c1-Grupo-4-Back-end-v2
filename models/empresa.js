@@ -20,7 +20,9 @@ const empresaSchema = new mongoose.Schema({
     },
     choferes: [{type: Schema.Types.ObjectId, ref: 'Chofer'}]
 
-})
+},{
+  collection: 'Empresa', // Especifica el nombre en singular
+});
 
 empresaSchema.set('toJSON', {
     transform: (_, ret) => {
