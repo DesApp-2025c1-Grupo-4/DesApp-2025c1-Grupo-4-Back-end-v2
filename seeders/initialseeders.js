@@ -6,7 +6,7 @@ const {Localizacion} = require('../models');
 const {Deposito} = require('../models');
 const {Asignacion} = require('../models');
 const {Viaje} = require('../models');
-const {Vehiculo} = require('../models/vehiculo');
+//const {Vehiculo} = require('../models/vehiculo');
 
 async function seedDatabase() {
     try {
