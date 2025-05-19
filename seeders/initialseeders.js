@@ -6,11 +6,19 @@ const {Localizacion} = require('../models');
 const {Deposito} = require('../models');
 const {Asignacion} = require('../models');
 const {Viaje} = require('../models');
-//const {Vehiculo} = require('../models/vehiculo');
+const mongoose = require('mongoose');
+
 
 async function seedDatabase() {
     try {
-
+        // ✅ Reiniciamos el contador de mongoose-sequence
+        await mongoose.connection.collection('counters').deleteOne({ _id: 'Localizacion' });
+        await mongoose.connection.collection('counters').updateOne(
+            { _id: 'Localizacion' },
+            { $set: { seq: 0 } },
+            { upsert: true } // crea si no existe
+    );
+        
         // Se borra el contenido de las tablas.
         
         await Empresa.deleteMany({});
@@ -21,6 +29,8 @@ async function seedDatabase() {
         await Asignacion.deleteMany({});
         await Viaje.deleteMany({});
         
+
+
         // Se cargan los datos de las tablas.
 
         const empresas = await Empresa.insertMany([
@@ -35,10 +45,22 @@ async function seedDatabase() {
             { patente: "ABC123", marca: "Renault", modelo: "A1",año: "2022",volumen: 75.30, peso: 40000, tipoVehiculo: "Camión"},
             { patente: "JKL8956", marca: "Mercedes", modelo: "Z5",año: "2023",volumen: 5.80, peso: 15000, tipoVehiculo: "Auto"}
         ]);
-        const localizaciones = await Localizacion.insertMany([
-            { calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
-            { calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
-        ]);
+        /*const localizaciones = await Localizacion.insertMany([
+            {calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
+            {calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
+        ]);*/
+        const datosLocalizacion = [
+            {calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
+            {calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
+        ];
+        // Insertar uno por uno usando .save() para que mongoose-sequence funcione
+        const localizaciones = [];
+        for (const entrada of datosLocalizacion) {
+            const doc = new Localizacion(entrada);
+            const savedDoc = await doc.save();
+            localizaciones.push(savedDoc);
+        }
+
         const depositos = await Deposito.insertMany([
             { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596", localizacion: null},
             { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296", localizacion: null}
