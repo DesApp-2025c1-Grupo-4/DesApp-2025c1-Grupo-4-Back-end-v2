@@ -4,7 +4,8 @@ const {Schema} = require('mongoose')
 const vehiculoSchema = new mongoose.Schema({
     patente: {
         type: Schema.Types.String,
-        required: true
+        required: true,
+        unique: true
     },
     marca: {
         type: Schema.Types.String,
@@ -36,7 +37,11 @@ const vehiculoSchema = new mongoose.Schema({
 
 vehiculoSchema.set('toJSON', {
     transform: (_, ret) => {
-        delete ret.__v
+        delete ret.__v;
+        if(ret.año !== undefined){
+            // necesario para evitar error de serialización, solución sin modificar esquema.
+            ret.año = ret.año.toString();
+        }
     }
 })
 
