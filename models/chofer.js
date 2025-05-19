@@ -27,7 +27,10 @@ const choferSchema = new mongoose.Schema({
 choferSchema.set('toJSON', {
     transform: (_, ret) => {
         delete ret.__v,
-        delete ret_id
+        delete ret_id;
+        if(ret.cuil !== undefined){
+            ret.cuil = ret.cuil.toString();
+        }
     }
 })
 

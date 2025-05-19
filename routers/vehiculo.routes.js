@@ -8,7 +8,7 @@ const schemasValidador = require('../middleware/schemasValidador')
 const routes = Router()
 
 routes.get('/',vehiculoController.getVehiculo)
-routes.get('/:patente',validarPatenteVehiculo(Vehiculo),vehiculoController.getVehiculoByPatente)
+//routes.get('/:patente',validarPatenteVehiculo(Vehiculo),vehiculoController.getVehiculoByPatente)
 routes.post('/',schemasValidador(vehiculoSchema),vehiculoController.addVehiculo)
 
 module.exports = routes
