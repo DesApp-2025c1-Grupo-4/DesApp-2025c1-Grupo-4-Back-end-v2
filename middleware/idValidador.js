@@ -1,16 +1,5 @@
 const mongoose = require('mongoose')
 
-const validarId = (Modelo) => {
-    return async (req, res, next) => {
-        const id = req.params.id;
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ error: "ID no válido" });
-        }
-        req.modelo = Modelo;
-        next();
-    };
-};
-
 const validarPatenteVehiculo = (Modelo) => {
     return async (req, res, next) => {
         const { patente } = req.params;
@@ -27,6 +16,26 @@ const validarPatenteVehiculo = (Modelo) => {
             next(); // Continúa con el siguiente middleware o controlador
         } catch (error) {
             res.status(500).json({ error: "Error al buscar la patente" });
+        }
+    };
+};
+
+const validarId = (Modelo) => {
+    return async (req, res, next) => {
+        const { _id } = req.params;
+
+        try {
+            // Buscar el id en la base de datos
+            const id = await Modelo.findOne({ _id });
+
+            if (!id) {
+                return res.status(404).json({ error: "id no encontrada" });
+            }
+
+            req.id = id; // Guarda el id encontrado en la request
+            next(); // Continúa con el siguiente middleware o controlador
+        } catch (error) {
+            res.status(500).json({ error: "Error al buscar id" });
         }
     };
 };

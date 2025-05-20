@@ -14,9 +14,9 @@ const depositoSchema = new mongoose.Schema({
         type: Schema.Types.BigInt,
         required: true
     },
-    localizacion:{type: Schema.Types.ObjectId, ref: 'Localizacion'}
+    localizacion:{type: Number, ref: 'Localizacion'}
 },{
-  collection: 'Deposito', // Especifica el nombre en singular
+    collection: 'Deposito', 
 })
 
 depositoSchema.set('toJSON', {
