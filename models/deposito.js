@@ -21,7 +21,10 @@ const depositoSchema = new mongoose.Schema({
 
 depositoSchema.set('toJSON', {
     transform: (_, ret) => {
-        delete ret._v
+        delete ret._v;
+        if(ret.contacto !== undefined){
+            ret.contacto = ret.contacto.toString();
+        }
     }
 })
 

@@ -11,6 +11,12 @@ const mongoose = require('mongoose');
 
 async function seedDatabase() {
     try {
+
+    /*    // Verificar el estado actual de la colección "counters"
+        const counters = await mongoose.connection.collection('counters').find().toArray();
+        console.log("Estado de la colección counters:", counters);*/
+
+
         // ✅ Reiniciamos el contador de mongoose-sequence
         await mongoose.connection.collection('counters').deleteOne({ _id: 'Localizacion' });
         await mongoose.connection.collection('counters').updateOne(
@@ -18,8 +24,16 @@ async function seedDatabase() {
             { $set: { seq: 0 } },
             { upsert: true } // crea si no existe
     );
+
+        await mongoose.connection.collection('counters').deleteOne({ _id: 'Deposito' });
+        await mongoose.connection.collection('counters').deleteMany({ reference_value: null });
+        await mongoose.connection.collection('counters').updateOne(
+            { _id: 'Deposito' },
+            { $set: { seq: 10 } },
+            { upsert: true } // crea si no existe
+    );
         
-        // Se borra el contenido de las tablas.
+      // Se borra el contenido de las tablas.
         
         await Empresa.deleteMany({});
         await Chofer.deleteMany({});
@@ -61,10 +75,24 @@ async function seedDatabase() {
             localizaciones.push(savedDoc);
         }
 
-        const depositos = await Deposito.insertMany([
+        /*const depositos = await Deposito.insertMany([
             { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596", localizacion: null},
             { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296", localizacion: null}
-        ]);
+        ]);*/
+
+        const datosDeposito = [
+            { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596", localizacion: null},
+            { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296", localizacion: null}
+        ];
+
+        // Insertar uno por uno usando .save() para que mongoose-sequence funcione
+        const depositos = [];
+        for (const entrada of datosDeposito) {
+            const doc = new Deposito(entrada);
+            const savedDoc = await doc.save();
+            depositos.push(savedDoc);
+        }
+
         const asignaciones = await Asignacion.insertMany([
             { fechaAsignacion: new Date(2025, 5, 16), vehiculoPropio: true, chofer:null, vehiculo:null, viaje:null},
             { fechaAsignacion: new Date(2025, 4, 20), vehiculoPropio: false, chofer:null, vehiculo:null, viaje:null}
