@@ -22,7 +22,7 @@ depositoController.getDeposito = getDeposito;
 
 const getDepositoById = async (req,res) => {
     const id = req.id; // Ya viene del middleware
-    res.status(200).json(deposito);
+    res.status(200).json(id);
 };
 depositoController.getDepositoById = getDepositoById;
 

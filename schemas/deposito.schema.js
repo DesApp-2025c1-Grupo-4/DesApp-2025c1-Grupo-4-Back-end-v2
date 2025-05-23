@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 const depositoSchema = Joi.object().keys(
     {
-    tipo: Joi.string.min(1).max(15).required().messages({
+    tipo: Joi.string().min(1).max(15).required().messages({
         "any.required":"El tipo es requerida",
         "string.min": "El tipo debe tener como mínimo {#limit} caracteres",
         "string.max": "El tipo debe tener como máximo {#limit} caracteres",

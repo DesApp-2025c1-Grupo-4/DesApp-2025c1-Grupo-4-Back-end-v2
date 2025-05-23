@@ -8,7 +8,7 @@ const schemasValidador = require('../middleware/schemasValidador')
 const routes = Router()
 
 routes.get('/', depositoController.getDeposito)
-routes.get('/:id',validarId(Deposito),depositoController.getDepositoById)
+routes.get('/:_id',validarId(Deposito),depositoController.getDepositoById)
 routes.post('/',schemasValidador(depositoSchema),depositoController.addDeposito)
 
 module.exports = routes

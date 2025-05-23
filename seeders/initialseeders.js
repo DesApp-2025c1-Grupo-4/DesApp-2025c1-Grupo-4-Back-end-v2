@@ -10,15 +10,26 @@ const mongoose = require('mongoose');
 
 
 async function seedDatabase() {
+
     try {
+    const indexes = await mongoose.connection.collection('counters').indexes();
+    const indexToDelete = indexes.find(idx => idx.name === 'id_1_reference_value_1');
+    
+        if (indexToDelete) {
+            await mongoose.connection.collection('counters').dropIndex('id_1_reference_value_1');
+            console.log('Índice id_1_reference_value_1 eliminado correctamente.');
+        } else {
+            console.log('Índice id_1_reference_value_1 no encontrado. Continuando...');
+        }
+    } catch (err) {
+    console.error('Error al verificar o eliminar el índice:', err);
+    }
 
-    /*    // Verificar el estado actual de la colección "counters"
-        const counters = await mongoose.connection.collection('counters').find().toArray();
-        console.log("Estado de la colección counters:", counters);*/
-
+    try {
 
         // ✅ Reiniciamos el contador de mongoose-sequence
         await mongoose.connection.collection('counters').deleteOne({ _id: 'Localizacion' });
+        await mongoose.connection.collection('counters').deleteMany({ reference_value: null });
         await mongoose.connection.collection('counters').updateOne(
             { _id: 'Localizacion' },
             { $set: { seq: 0 } },
