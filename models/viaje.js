@@ -15,8 +15,8 @@ const viajeSchema = new mongoose.Schema({
         type: Schema.Types.String,
         required: true
     },
-    depositoOrigen: {type: Schema.Types.ObjectId, ref: 'Deposito'},
-    depositoDestino: {type: Schema.Types.ObjectId, ref: 'Deposito'},
+    depositoOrigen: {type: Number, ref: 'Deposito'},
+    depositoDestino: {type: Number, ref: 'Deposito'},
     asignacion: {type: Schema.Types.ObjectId, ref: 'Asignacion'}
 },{
   collection: 'Viaje', // Especifica el nombre en singular

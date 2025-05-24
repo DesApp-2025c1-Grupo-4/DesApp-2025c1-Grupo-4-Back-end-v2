@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 const localizacionSchema = Joi.object().keys(
     {
-    calle: Joi.String.min(1).max(50).required().messages({
+    calle: Joi.string().min(1).max(50).required().messages({
         "any.required":"La calle es requerida",
         "string.min": "La calle debe tener como mínimo {#limit} caracteres",
         "string.max": "La calle debe tener como máximo {#limit} caracteres",

@@ -6,12 +6,45 @@ const {Localizacion} = require('../models');
 const {Deposito} = require('../models');
 const {Asignacion} = require('../models');
 const {Viaje} = require('../models');
-const vehiculo = require('../models/vehiculo');
+const mongoose = require('mongoose');
+
 
 async function seedDatabase() {
+
+    try {
+    const indexes = await mongoose.connection.collection('counters').indexes();
+    const indexToDelete = indexes.find(idx => idx.name === 'id_1_reference_value_1');
+    
+        if (indexToDelete) {
+            await mongoose.connection.collection('counters').dropIndex('id_1_reference_value_1');
+            console.log('Índice id_1_reference_value_1 eliminado correctamente.');
+        } else {
+            console.log('Índice id_1_reference_value_1 no encontrado. Continuando...');
+        }
+    } catch (err) {
+    console.error('Error al verificar o eliminar el índice:', err);
+    }
+
     try {
 
-        // Se borra el contenido de las tablas.
+        // ✅ Reiniciamos el contador de mongoose-sequence
+        await mongoose.connection.collection('counters').deleteOne({ _id: 'Localizacion' });
+        await mongoose.connection.collection('counters').deleteMany({ reference_value: null });
+        await mongoose.connection.collection('counters').updateOne(
+            { _id: 'Localizacion' },
+            { $set: { seq: 0 } },
+            { upsert: true } // crea si no existe
+    );
+
+        await mongoose.connection.collection('counters').deleteOne({ _id: 'Deposito' });
+        await mongoose.connection.collection('counters').deleteMany({ reference_value: null });
+        await mongoose.connection.collection('counters').updateOne(
+            { _id: 'Deposito' },
+            { $set: { seq: 10 } },
+            { upsert: true } // crea si no existe
+    );
+        
+      // Se borra el contenido de las tablas.
         
         await Empresa.deleteMany({});
         await Chofer.deleteMany({});
@@ -21,6 +54,8 @@ async function seedDatabase() {
         await Asignacion.deleteMany({});
         await Viaje.deleteMany({});
         
+
+
         // Se cargan los datos de las tablas.
 
         const empresas = await Empresa.insertMany([
@@ -35,14 +70,40 @@ async function seedDatabase() {
             { patente: "ABC123", marca: "Renault", modelo: "A1",año: "2022",volumen: 75.30, peso: 40000, tipoVehiculo: "Camión"},
             { patente: "JKL8956", marca: "Mercedes", modelo: "Z5",año: "2023",volumen: 5.80, peso: 15000, tipoVehiculo: "Auto"}
         ]);
-        const localizaciones = await Localizacion.insertMany([
-            { calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
-            { calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
-        ]);
-        const depositos = await Deposito.insertMany([
+        /*const localizaciones = await Localizacion.insertMany([
+            {calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
+            {calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
+        ]);*/
+        const datosLocalizacion = [
+            {calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
+            {calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
+        ];
+        // Insertar uno por uno usando .save() para que mongoose-sequence funcione
+        const localizaciones = [];
+        for (const entrada of datosLocalizacion) {
+            const doc = new Localizacion(entrada);
+            const savedDoc = await doc.save();
+            localizaciones.push(savedDoc);
+        }
+
+        /*const depositos = await Deposito.insertMany([
             { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596", localizacion: null},
             { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296", localizacion: null}
-        ]);
+        ]);*/
+
+        const datosDeposito = [
+            { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596", localizacion: null},
+            { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296", localizacion: null}
+        ];
+
+        // Insertar uno por uno usando .save() para que mongoose-sequence funcione
+        const depositos = [];
+        for (const entrada of datosDeposito) {
+            const doc = new Deposito(entrada);
+            const savedDoc = await doc.save();
+            depositos.push(savedDoc);
+        }
+
         const asignaciones = await Asignacion.insertMany([
             { fechaAsignacion: new Date(2025, 5, 16), vehiculoPropio: true, chofer:null, vehiculo:null, viaje:null},
             { fechaAsignacion: new Date(2025, 4, 20), vehiculoPropio: false, chofer:null, vehiculo:null, viaje:null}

@@ -1,12 +1,12 @@
 const express = require('express')
-//const routes = require('./routes/index');
+const routes = require('./routers/index');
 require('dotenv').config()
 const { connectToDatabase } = require('./db/server')
 const initialEmpresa = require('./seeders/initialseeders')
 
 const app = express()
 app.use(express.json())
-//app.use(routes)
+app.use(routes)
 
 const PORT = process.env.PORT ?? 3000
 

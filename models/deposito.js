@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const depositoSchema = new mongoose.Schema({
+    _id: {
+        type: Number
+    },
     tipo: {
         type: Schema.Types.String,
         required: true
@@ -14,14 +18,19 @@ const depositoSchema = new mongoose.Schema({
         type: Schema.Types.BigInt,
         required: true
     },
-    localizacion:{type: Schema.Types.ObjectId, ref: 'Localizacion'}
+    localizacion:{type: Number, ref: 'Localizacion'}
 },{
-  collection: 'Deposito', // Especifica el nombre en singular
+    _id: false,
+    collection: 'Deposito', 
 })
+depositoSchema.plugin(AutoIncrement, {id: 'Deposito', inc_field: '_id', start_seq: 0})
 
 depositoSchema.set('toJSON', {
     transform: (_, ret) => {
-        delete ret._v
+        delete ret.__v;
+        if(ret.contacto !== undefined){
+            ret.contacto = ret.contacto.toString();
+        }
     }
 })
 
