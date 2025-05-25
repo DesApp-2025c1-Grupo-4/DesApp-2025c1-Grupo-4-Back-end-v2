@@ -1,12 +1,6 @@
 const { DateTime, Zone } = require('luxon');
-const {Empresa} = require('../models');
-const {Chofer} = require('../models');
-const {Vehiculo} = require('../models');
-const {Localizacion} = require('../models');
-const {Deposito} = require('../models');
-const {Asignacion} = require('../models');
-const {Viaje} = require('../models');
 const mongoose = require('mongoose');
+const {Empresa, Chofer, Vehiculo, Localizacion, Deposito, Asignacion, Viaje } = require('../models');
 
 
 async function seedDatabase() {
@@ -17,44 +11,32 @@ async function seedDatabase() {
     
         if (indexToDelete) {
             await mongoose.connection.collection('counters').dropIndex('id_1_reference_value_1');
-            console.log('Índice id_1_reference_value_1 eliminado correctamente.');
+            // console.log('Índice id_1_reference_value_1 eliminado correctamente.');
         } else {
             console.log('Índice id_1_reference_value_1 no encontrado. Continuando...');
         }
     } catch (err) {
     console.error('Error al verificar o eliminar el índice:', err);
     }
-
+    
     try {
-
+        // Aquí se agrega el nombre de las tablas que tienen campo: _id de tipo: number.
+        const entidades = ['Localizacion','Deposito','Asignacion']
         // ✅ Reiniciamos el contador de mongoose-sequence
-        await mongoose.connection.collection('counters').deleteOne({ _id: 'Localizacion' });
-        await mongoose.connection.collection('counters').deleteMany({ reference_value: null });
-        await mongoose.connection.collection('counters').updateOne(
-            { _id: 'Localizacion' },
-            { $set: { seq: 0 } },
-            { upsert: true } // crea si no existe
-    );
+        for(entidad of entidades){
+            await mongoose.connection.collection('counters').deleteOne({ _id: entidad});
+            await mongoose.connection.collection('counters').deleteMany({ reference_value: null});
+            await mongoose.connection.collection('counters').updateOne( 
+                { _id: entidad },
+                { $set: { seq: 0 } },
+                { upsert: true } // crea si no existe
+            );
+        }
 
-        await mongoose.connection.collection('counters').deleteOne({ _id: 'Deposito' });
-        await mongoose.connection.collection('counters').deleteMany({ reference_value: null });
-        await mongoose.connection.collection('counters').updateOne(
-            { _id: 'Deposito' },
-            { $set: { seq: 10 } },
-            { upsert: true } // crea si no existe
-    );
-        
-      // Se borra el contenido de las tablas.
-        
-        await Empresa.deleteMany({});
-        await Chofer.deleteMany({});
-        await Vehiculo.deleteMany({});
-        await Localizacion.deleteMany({});
-        await Deposito.deleteMany({});
-        await Asignacion.deleteMany({});
-        await Viaje.deleteMany({});
-        
-
+        const listaEntidades = [Empresa, Chofer, Vehiculo, Localizacion, Deposito, Asignacion, Viaje];
+        for(tabla of listaEntidades){
+            await tabla.deleteMany({});
+        } 
 
         // Se cargan los datos de las tablas.
 
@@ -70,10 +52,6 @@ async function seedDatabase() {
             { patente: "ABC123", marca: "Renault", modelo: "A1",año: "2022",volumen: 75.30, peso: 40000, tipoVehiculo: "Camión"},
             { patente: "JKL8956", marca: "Mercedes", modelo: "Z5",año: "2023",volumen: 5.80, peso: 15000, tipoVehiculo: "Auto"}
         ]);
-        /*const localizaciones = await Localizacion.insertMany([
-            {calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
-            {calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
-        ]);*/
         const datosLocalizacion = [
             {calle: "Av. Rivadavia", número: "123", localidad: "Morón",coordenadasGeograficas: "ABC",provinciaOestado: "Buenos Aires", país: "Argentina"},
             {calle: "Av. Cardenal José María Caro", número: "400", localidad: "Conchalí",coordenadasGeograficas: "DEF",provinciaOestado: "Región Metropolitana", país: "Chile"}
@@ -85,11 +63,6 @@ async function seedDatabase() {
             const savedDoc = await doc.save();
             localizaciones.push(savedDoc);
         }
-
-        /*const depositos = await Deposito.insertMany([
-            { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596", localizacion: null},
-            { tipo: "Propio", horarios: "miércoles a domingos de 8.00h a 18.00h", contacto: "1544841296", localizacion: null}
-        ]);*/
 
         const datosDeposito = [
             { tipo: "Externo", horarios: "Lunes a viernes de 8.30h a 17.00h", contacto: "1552847596", localizacion: null},
@@ -104,10 +77,18 @@ async function seedDatabase() {
             depositos.push(savedDoc);
         }
 
-        const asignaciones = await Asignacion.insertMany([
+        const datosAsignacion = [
             { fechaAsignacion: new Date(2025, 5, 16), vehiculoPropio: true, chofer:null, vehiculo:null, viaje:null},
             { fechaAsignacion: new Date(2025, 4, 20), vehiculoPropio: false, chofer:null, vehiculo:null, viaje:null}
-        ]);
+        ];
+
+        const asignaciones = [];
+        for (const dato of datosAsignacion){
+            const asignacionNueva = new Asignacion(dato);
+            const guardarAsignacionNueva = await asignacionNueva.save();
+            asignaciones.push(guardarAsignacionNueva)
+        }
+
         const viajes = await Viaje.insertMany([
             { inicioViaje: new Date(2025, 5, 16, 15, 20), llegadaViaje: new Date(2025, 5, 16, 16, 20), estado:"Planificado", depositoOrigen: null, depositoDestino:null, asignacion: null},
             { inicioViaje: new Date(2025, 5, 16, 14, 30), llegadaViaje: new Date(2025, 5, 16, 15, 20), estado:"Cancelado", depositoOrigen: null, depositoDestino:null, asignacion: null}
@@ -134,23 +115,11 @@ async function seedDatabase() {
         depositos[1].localizacion = localizaciones[1]._id;
         await depositos[1].save();
 
-        // Actualizar choferes de asignaciones
-        asignaciones[0].chofer = choferes[0]._id;
-        await asignaciones[0].save();
-        asignaciones[1].chofer = choferes[1]._id;
-        await asignaciones[1].save();
-
         // Actualizar asignaciones de Choferes
-        choferes[0].asignaciones.push(asignaciones[0]._id);
-        choferes[1].asignaciones.push(asignaciones[1]._id);
+        choferes[0].asignaciones.push(Number(asignaciones[0]._id));
+        choferes[1].asignaciones.push(Number(asignaciones[1]._id));
         await choferes[0].save();
         await choferes[1].save();
-
-        // Actualizar vehiculos de asignaciones
-        asignaciones[0].vehiculo = vehiculos[0]._id;
-        await asignaciones[0].save();
-        asignaciones[1].vehiculo = vehiculos[1]._id;
-        await asignaciones[1].save();
 
         // Actualizar localizaciones de viajes
         viajes[0].depositoOrigen = depositos[0]._id;
@@ -161,15 +130,27 @@ async function seedDatabase() {
         await viajes[1].save();
 
         // Actualizar asignaciones de viajes
-        viajes[0].asignacion = asignaciones[0]._id;
+        viajes[0].asignacion = Number(asignaciones[0]._id);
+        viajes[1].asignacion = Number(asignaciones[1]._id);
         await viajes[0].save();
-        viajes[1].asignacion = asignaciones[1]._id;
         await viajes[1].save();
 
         // Actualizar viajes de asignaciones
         asignaciones[0].viaje = viajes[0]._id;
         await asignaciones[0].save();
         asignaciones[1].viaje = viajes[1]._id;
+        await asignaciones[1].save();
+
+        // Actualizar vehiculos de asignaciones
+        asignaciones[0].vehiculo = vehiculos[0]._id;
+        await asignaciones[0].save();
+        asignaciones[1].vehiculo = vehiculos[1]._id;
+        await asignaciones[1].save();
+        
+        // Actualizar choferes de asignaciones
+        asignaciones[0].chofer = choferes[0]._id;
+        await asignaciones[0].save();
+        asignaciones[1].chofer = choferes[1]._id;
         await asignaciones[1].save();
 
         console.log("Base de datos poblada con éxito");
