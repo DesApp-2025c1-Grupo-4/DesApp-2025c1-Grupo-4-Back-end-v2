@@ -1,8 +1,12 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
 const { DateTime } = require("luxon");
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const viajeSchema = new mongoose.Schema({
+    _id: {
+        type: Number
+    },
     inicioViaje: {
         type: Schema.Types.Date,
         required: true
@@ -19,8 +23,11 @@ const viajeSchema = new mongoose.Schema({
     depositoDestino: {type: Number, ref: 'Deposito'},
     asignacion: {type: Number, ref: 'Asignacion'}
 },{
-  collection: 'Viaje', // Especifica el nombre en singular
+    _id: false,
+    collection: 'Viaje', // Especifica el nombre en singular
 })
+
+viajeSchema.plugin(AutoIncrement, {id: 'Viaje', inc_field: '_id', start_seq: 0})
 
 viajeSchema.set('toJSON', {
     transform: (_, ret) => {

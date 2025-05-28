@@ -16,7 +16,7 @@ const asignacionSchema = new mongoose.Schema({
     },
     chofer: {type: Schema.Types.ObjectId, ref: 'Chofer'},
     vehiculo: {type: Schema.Types.ObjectId, ref: 'Vehiculo'},
-    viaje: {type: Schema.Types.ObjectId, ref: 'Viaje'}
+    viaje: {type: Number, ref: 'Viaje'}
 },{
     _id: false,
     collection: 'Asignacion',

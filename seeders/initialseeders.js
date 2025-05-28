@@ -21,7 +21,7 @@ async function seedDatabase() {
     
     try {
         // Aquí se agrega el nombre de las tablas que tienen campo: _id de tipo: number.
-        const entidades = ['Localizacion','Deposito','Asignacion']
+        const entidades = ['Localizacion','Deposito','Asignacion','Viaje']
         // ✅ Reiniciamos el contador de mongoose-sequence
         for(entidad of entidades){
             await mongoose.connection.collection('counters').deleteOne({ _id: entidad});
@@ -89,10 +89,17 @@ async function seedDatabase() {
             asignaciones.push(guardarAsignacionNueva)
         }
 
-        const viajes = await Viaje.insertMany([
+        const datosViaje = [
             { inicioViaje: new Date(2025, 5, 16, 15, 20), llegadaViaje: new Date(2025, 5, 16, 16, 20), estado:"Planificado", depositoOrigen: null, depositoDestino:null, asignacion: null},
             { inicioViaje: new Date(2025, 5, 16, 14, 30), llegadaViaje: new Date(2025, 5, 16, 15, 20), estado:"Cancelado", depositoOrigen: null, depositoDestino:null, asignacion: null}
-        ])
+        ]
+
+        const viajes = [];
+        for (const entrada of datosViaje) {
+            const doc = new Viaje(entrada);
+            const savedDoc = await doc.save();
+            viajes.push(savedDoc);
+        }
 
         // Actualizar choferes de empresa
 
@@ -122,11 +129,11 @@ async function seedDatabase() {
         await choferes[1].save();
 
         // Actualizar localizaciones de viajes
-        viajes[0].depositoOrigen = depositos[0]._id;
-        viajes[0].depositoDestino = depositos[1]._id;
+        viajes[0].depositoOrigen = Number(depositos[0]._id);
+        viajes[0].depositoDestino = Number(depositos[1]._id);
         await viajes[0].save();
-        viajes[1].depositoOrigen = depositos[1]._id;
-        viajes[1].depositoDestino = depositos[0]._id;
+        viajes[1].depositoOrigen = Number(depositos[1]._id);
+        viajes[1].depositoDestino = Number(depositos[0]._id);
         await viajes[1].save();
 
         // Actualizar asignaciones de viajes
