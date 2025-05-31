@@ -52,5 +52,35 @@ const asignacionDelViajeConId = async (req,res) => {
 
 viajeController.asignacionDelViajeConId = asignacionDelViajeConId;
 
+const getListaDeViajes = async (req, res) => {
+    try {
+        const viajes = await Viaje.find().populate([
+            {
+                path: "asignacion",
+                model: "Asignacion",
+                select: "-viaje",
+                populate: {
+                    path: "chofer",
+                    select: "-empresa"
+                }
+            },
+            {
+                path: "asignacion",
+                model: "Asignacion",
+                select: "-viaje",
+                populate: {
+                    path: "vehiculo",
+                    select: "patente -_id"
+                }
+            }
+        ]);
+
+        res.status(200).json(viajes);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener la lista de viajes", details: error.message });
+    }
+};
+viajeController.getListaDeViajes = getListaDeViajes;
+
 
 module.exports = viajeController;
