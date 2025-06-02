@@ -130,9 +130,11 @@ async function seedDatabase() {
 
         // Actualizar localizaciones de viajes
         viajes[0].depositoOrigen = Number(depositos[0]._id);
+        await viajes[0].save();
         viajes[0].depositoDestino = Number(depositos[1]._id);
         await viajes[0].save();
         viajes[1].depositoOrigen = Number(depositos[1]._id);
+        await viajes[1].save();
         viajes[1].depositoDestino = Number(depositos[0]._id);
         await viajes[1].save();
 
