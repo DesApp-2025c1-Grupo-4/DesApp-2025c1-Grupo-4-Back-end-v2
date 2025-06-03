@@ -4,6 +4,7 @@ const choferRoutes = require('./chofer.routes')
 const localizacionesRoutes = require('./localizacion.route')
 const depositosRoutes = require('./deposito.routes')
 const asignacionRoutes = require('./asignacion.route')
+const empresaRoutes = require('./empresa.route')
 const viajesRoutes = require('./viaje.route')
 const router = Router()
 
@@ -13,5 +14,6 @@ router.use('/choferes', choferRoutes )
 router.use('/depositos', depositosRoutes)
 router.use('/asignaciones', asignacionRoutes)
 router.use('/viajes', viajesRoutes)
+router.use('/empresas', empresaRoutes)
 
 module.exports = router
