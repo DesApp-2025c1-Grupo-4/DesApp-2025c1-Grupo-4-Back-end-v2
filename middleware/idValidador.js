@@ -52,3 +52,22 @@ const validarCuilChofer = (Modelo) => {
 };
 
 module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer};
+
+const validarCuitEmpresa = (Modelo) => {
+    return async (req, res, next) => {
+        const { cuit } = req.params;
+        try {
+            //Buscar el cuit en la base de datos
+            const empresa = await Modelo.findOne({ cuit });
+            if(!empresa) {
+                return res.status(404).json({error: "CUIT no encontrado"});
+            }
+            req.empresa = empresa; //Guarda la empresa encontrada en la request
+            next(); //Continúa con el siguiente middleware o controlador
+        } catch (error) {
+            res.status(500).json({ error: "Error al buscar el CUIT" });
+        }
+    };
+};
+
+module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer, validarCuitEmpresa};

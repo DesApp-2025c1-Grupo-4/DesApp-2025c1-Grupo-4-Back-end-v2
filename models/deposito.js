@@ -34,4 +34,4 @@ depositoSchema.set('toJSON', {
     }
 })
 
-module.exports = mongoose.model('deposito', depositoSchema);
+module.exports = mongoose.model('Deposito', depositoSchema);

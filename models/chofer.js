@@ -19,15 +19,14 @@ const choferSchema = new mongoose.Schema({
         required: true
     },
     empresa: {type: Schema.Types.ObjectId, ref: 'Empresa'},
-    asignaciones: [{type: Schema.Types.ObjectId, ref: 'Asignacion'}]
+    asignaciones: [{type: Number, ref: 'Asignacion'}]
 },{
-  collection: 'Chofer', // Especifica el nombre en singular
+    collection: 'Chofer', // Especifica el nombre en singular
 })
 
 choferSchema.set('toJSON', {
     transform: (_, ret) => {
-        delete ret.__v,
-        delete ret_id;
+        delete ret.__v;
         if(ret.cuil !== undefined){
             ret.cuil = ret.cuil.toString();
         }
