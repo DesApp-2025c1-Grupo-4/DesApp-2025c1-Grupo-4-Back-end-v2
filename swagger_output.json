@@ -1,0 +1,328 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Sistema de gestión de viajes",
+    "description": "DesApp 2025C1 - Grupo 4"
+  },
+  "host": "localhost:3001",
+  "basePath": "/",
+  "schemes": ["http"],
+  "tags": [
+    {
+      "name": "Vehículos",
+      "description": "Operaciones relacionadas con la gestión de vehículos"
+    },
+    {
+      "name": "Localizaciones",
+      "description": "Operaciones relacionadas con localizaciones geográficas"
+    },
+    {
+      "name": "Choferes",
+      "description": "Operaciones relacionadas con la gestión de choferes"
+    },
+    {
+      "name": "Depósitos",
+      "description": "Operaciones relacionadas con la gestión de depósitos"
+    },
+    {
+      "name": "Asignaciones",
+      "description": "Operaciones relacionadas con asignaciones de viajes"
+    },
+    {
+      "name": "Viajes",
+      "description": "Operaciones relacionadas con la gestión de viajes"
+    },
+    {
+      "name": "Empresas",
+      "description": "Operaciones relacionadas con la gestión de empresas"
+    }
+  ],
+  "paths": {
+    "/vehiculos/": {
+      "get": {
+        "tags": ["Vehículos"],
+        "description": "Obtiene una lista de todos los vehículos",
+        "responses": {
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "post": {
+        "tags": ["Vehículos"],
+        "description": "Crea un nuevo registro de vehículo",
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/vehiculos/{patente}": {
+      "get": {
+        "tags": ["Vehículos"],
+        "description": "Obtiene un vehículo por su patente",
+        "parameters": [
+          {
+            "name": "patente",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/localizaciones/": {
+      "get": {
+        "tags": ["Localizaciones"],
+        "description": "Obtiene una lista de localizaciones",
+        "responses": {
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/localizaciones/{_id}": {
+      "get": {
+        "tags": ["Localizaciones"],
+        "description": "Obtiene una localizacion por su ID",
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/choferes/": {
+      "get": {
+        "tags": ["Choferes"],
+        "description": "Obtiene una lista de todos los choferes",
+        "responses": {
+          "200": { "description": "OK" },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "post": {
+        "tags": ["Choferes"],
+        "description": "Crea un nuevo registro de chofer",
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/choferes/{cuil}": {
+      "get": {
+        "tags": ["Choferes"],
+        "description": "Obtiene un chofer por su numero de CUIL",
+        "parameters": [
+          {
+            "name": "cuil",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/depositos/": {
+      "get": {
+        "tags": ["Depósitos"],
+        "description": "Obtiene una lista de depósitos",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Depósitos"],
+        "description": "Crea un nuevo registro de depósito",
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/depositos/{_id}": {
+      "get": {
+        "tags": ["Depósitos"],
+        "description": "Obtiene un depósito por su ID",
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/asignaciones/": {
+      "get": {
+        "tags": ["Asignaciones"],
+        "description": "Obtiene una lista de asignaciones",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/asignaciones/{_id}": {
+      "get": {
+        "tags": ["Asignaciones"],
+        "description": "Obtiene una asignacion por su ID",
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/viajes/": {
+      "get": {
+        "tags": ["Viajes"],
+        "description": "Obtiene una lista de viajes",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Viajes"],
+        "description": "Crea un nuevo registro de viaje",
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/viajes/lista": {
+      "get": {
+        "tags": ["Viajes"],
+        "description": "Obtiene una lista de viajes con sus datos asociados",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/viajes/{_id}": {
+      "get": {
+        "tags": ["Viajes"],
+        "description": "Obtiene un viaje por su ID",
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/viajes/{_id}/asignacion": {
+      "get": {
+        "tags": ["Viajes"],
+        "description": "Obtiene la asignacion de un viaje por su ID",
+        "parameters": [
+          {
+            "name": "_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/empresas/": {
+      "get": {
+        "tags": ["Empresas"],
+        "description": "Obtiene una lista de empresas",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Empresas"],
+        "description": "Crea un nuevo registro de empresa",
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Bad Request" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/empresas/{cuit}": {
+      "get": {
+        "tags": ["Empresas"],
+        "description": "Obtiene una empresa por su numero de CUIT",
+        "parameters": [
+          {
+            "name": "cuit",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "OK" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    }
+  }
+}
