@@ -14,11 +14,11 @@ const addDeposito = async (req,res) => {
 }
 depositoController.addDeposito = addDeposito;
 
-const getDeposito = async (req,res) => {
+const getDepositos = async (req,res) => {
     const deposito = await Deposito.find()
     res.status(200).json(deposito)
 }
-depositoController.getDeposito = getDeposito;
+depositoController.getDepositos = getDepositos;
 
 const getDepositoById = async (req,res) => {
     const id = req.id; // Ya viene del middleware

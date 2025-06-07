@@ -2,12 +2,13 @@
   "name": "desapp-2025c1-grupo-4-back-end-v2",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "./src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon",
+    "start": "cross-env USE_SWAGGER=true nodemon src/app.js",
     "build": "run-s clean transpile",
-    "server": "node ./dist/bin/www"
+    "server": "cross-env USE_SWAGGER=true node ./dist/bin/www",
+    "dev": "cross-env USE_SWAGGER=false nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,11 @@
     "luxon": "^3.6.1",
     "mongoose": "^8.15.0",
     "mongoose-sequence": "^6.0.1",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "open": "^10.1.2",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

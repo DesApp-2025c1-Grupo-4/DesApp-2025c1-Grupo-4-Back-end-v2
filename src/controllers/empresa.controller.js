@@ -14,11 +14,11 @@ const addEmpresa = async (req,res) => {
 }
 empresaController.addEmpresa = addEmpresa;
 
-const getEmpresa = async (req,res) => {
+const getEmpresas = async (req,res) => {
     const empresa = await Empresa.find()
     res.status(200).json(empresa)
 }
-empresaController.getEmpresa = getEmpresa;
+empresaController.getEmpresas = getEmpresas;
 
 const getEmpresaByCuit = async (req,res) => {
     const empresa = req.empresa; // Ya viene del middleware

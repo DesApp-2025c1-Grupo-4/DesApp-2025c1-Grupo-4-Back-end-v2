@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const choferController = require('../controllers/chofer.controllers')
+const {ChoferController} = require('../controllers')
 const { Chofer } = require('../models')
 const choferSchema = require('../schemas/chofer.schema')
 const { validarCuilChofer } = require('../middleware/idValidador')
@@ -7,8 +7,8 @@ const schemasValidador = require('../middleware/schemasValidador')
 
 const routes = Router()
 
-routes.get('/',choferController.getChofer)
-routes.get('/:cuil',validarCuilChofer(Chofer),choferController.getChoferByCuil)
-routes.post('/',schemasValidador(choferSchema),choferController.addChofer)
+routes.get('/',ChoferController.getChoferes)
+routes.get('/:cuil',validarCuilChofer(Chofer),ChoferController.getChoferByCuil)
+routes.post('/',schemasValidador(choferSchema),ChoferController.addChofer)
 
 module.exports = routes
