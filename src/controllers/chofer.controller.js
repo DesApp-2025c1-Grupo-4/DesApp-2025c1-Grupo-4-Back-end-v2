@@ -14,11 +14,11 @@ const addChofer = async (req,res) => {
 }
 choferController.addChofer = addChofer;
 
-const getChofer = async (req,res) => {
+const getChoferes = async (req,res) => {
     const chofer = await Chofer.find()
     res.status(200).json(chofer)
 }
-choferController.getChofer = getChofer;
+choferController.getChoferes = getChoferes;
 
 const getChoferByCuil = async (req,res) => {
     const chofer = req.chofer; // Ya viene del middleware

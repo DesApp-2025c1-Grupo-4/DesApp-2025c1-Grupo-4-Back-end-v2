@@ -6,7 +6,7 @@ const { validarId } = require('../middleware/idValidador')
 
 const routes = Router()
 
-routes.get('/',localizacionController.getLocalizacion)
+routes.get('/',localizacionController.getLocalizaciones)
 routes.get('/:_id',validarId(Localizacion),localizacionController.getLocalizacionById)
 //routes.post('/',schemasValidador(vehiculoSchema),vehiculoController.addVehiculo)
 

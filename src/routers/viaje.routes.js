@@ -7,7 +7,7 @@ const schemasValidador = require('../middleware/schemasValidador')
 
 const routes = Router()
 
-routes.get('/', viajeController.getViaje)
+routes.get('/', viajeController.getViajes)
 routes.get('/lista',viajeController.getListaDeViajes)
 routes.get('/:_id',validarId(Viaje),viajeController.getViajeById)
 routes.post('/',schemasValidador(viajeSchema),viajeController.addViaje)

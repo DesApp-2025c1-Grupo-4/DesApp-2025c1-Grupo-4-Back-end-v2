@@ -2,11 +2,11 @@ const {Localizacion} = require('../models');
 const localizacionController = {}
 const mongoose = require('../db/server').mongoose;
 
-const getLocalizacion = async (req, res) => {
+const getLocalizaciones = async (req, res) => {
     const localizaciones = await Localizacion.find()
     res.status(200).json(localizaciones)
 }
-localizacionController.getLocalizacion = getLocalizacion
+localizacionController.getLocalizaciones = getLocalizaciones
 
 const getLocalizacionById = async (req, res) => {
     const id = req.id; // Ya viene del middleware
