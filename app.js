@@ -12,13 +12,13 @@ app.use(routes)
 
 const PORT = process.env.PORT ?? 3000
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+//app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.listen(PORT, async () => {
     await connectToDatabase()
     await initialEmpresa()
     console.log('Aplicación corriendo en el puerto: ', PORT)
     const open = (await import('open')).default;
-    await open(`http://localhost:${PORT}/api-docs`);
+    //await open(`http://localhost:${PORT}/api-docs`);
 })
 

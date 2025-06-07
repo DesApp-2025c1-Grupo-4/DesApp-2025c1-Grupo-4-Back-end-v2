@@ -7,7 +7,7 @@ const schemasValidador = require('../middleware/schemasValidador')
 
 const routes = Router()
 
-routes.get('/',empresaController.getEmpresa)
+routes.get('/',empresaController.getEmpresas)
 routes.get('/:cuit',validarCuitEmpresa(Empresa),empresaController.getEmpresaByCuit)
 routes.post('/',schemasValidador(empresaSchema),empresaController.addEmpresa)
 

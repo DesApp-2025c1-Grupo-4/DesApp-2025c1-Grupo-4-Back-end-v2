@@ -14,11 +14,11 @@ const addViaje = async (req, res) => {
 }
 viajeController.addViaje = addViaje;
 
-const getViaje = async (req, res) => {
+const getViajes = async (req, res) => {
     const viaje = await Viaje.find()
     res.status(200).json(viaje)
 }
-viajeController.getViaje = getViaje;
+viajeController.getViajes = getViajes;
 
 const getViajeById = async (req, res) => {
     const id = req.id; // Ya viene del middleware
