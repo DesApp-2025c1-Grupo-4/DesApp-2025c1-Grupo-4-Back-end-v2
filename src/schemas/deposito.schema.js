@@ -1,6 +1,7 @@
 const Joi = require('joi')
+const localizacionSchema = require('./localizacion.schema')
 
-const depositoSchema = Joi.object().keys(
+const depositoSinLocalizacionSchema = Joi.object().keys(
     {
     tipo: Joi.string().min(1).max(15).required().messages({
         "any.required":"El tipo es requerida",
@@ -20,8 +21,11 @@ const depositoSchema = Joi.object().keys(
     
     localizacion: Joi.number().optional()
 
-}).unknown(false).messages ({
-    'object.unknown': 'El atributo {#label} no está permitido.'
-})
+});
+
+const depositoSchema = depositoSinLocalizacionSchema.concat(localizacionSchema)
+    .messages ({
+        'object.unknown': 'El atributo {#label} no está permitido.'
+    })
 
 module.exports = depositoSchema
