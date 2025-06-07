@@ -2,10 +2,10 @@
   "name": "desapp-2025c1-grupo-4-back-end-v2",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "./src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon",
+    "start": "nodemon src/app.js",
     "build": "run-s clean transpile",
     "server": "node ./dist/bin/www"
   },
