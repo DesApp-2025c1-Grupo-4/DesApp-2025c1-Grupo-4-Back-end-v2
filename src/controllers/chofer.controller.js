@@ -15,7 +15,7 @@ const addChofer = async (req,res) => {
 choferController.addChofer = addChofer;
 
 const getChoferes = async (req,res) => {
-    const chofer = await Chofer.find()
+    const chofer = await Chofer.find().select('-asignaciones')
     res.status(200).json(chofer)
 }
 choferController.getChoferes = getChoferes;
