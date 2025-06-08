@@ -9,7 +9,7 @@ const addVehiculo = async (req,res) => {
         await vehiculo.save()
         res.status(201).json({mensaje : 'El vehiculo fue agregado correctamente'})
     } catch {
-        res.status(400).json({mensaje : 'El servidor no puede procesar la solicitud'})
+        res.status(400).json({mensaje : 'El servidor no puede procesar la solicitud para post en vehiculo'})
     }
 }
 vehiculoController.addVehiculo = addVehiculo;
