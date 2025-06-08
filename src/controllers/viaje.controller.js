@@ -15,9 +15,59 @@ const addViaje = async (req, res) => {
 viajeController.addViaje = addViaje;
 
 const getViajes = async (req, res) => {
-    const viaje = await Viaje.find()
-    res.status(200).json(viaje)
-}
+    try {
+        const { detalles } = req.query; // Capturamos el parámetro query
+        let viajesQuery = Viaje.find().select('-asignacion -depositoOrigen -depositoDestino');
+        if (detalles === "true") {
+            viajesQuery = viajesQuery.populate([
+                {
+                    path: "depositoOrigen",
+                    model: "Deposito",
+                    select: "localizacion",
+                    populate: {
+                        path: "localizacion",
+                        select: "provinciaOestado país -_id"
+                    }
+                },
+                {
+                    path: "depositoDestino",
+                    model: "Deposito",
+                    select: "localizacion",
+                    populate: {
+                        path: "localizacion",
+                        select: "provinciaOestado país -_id"
+                    }
+                },
+                {
+                    path: "asignacion",
+                    model: "Asignacion",
+                    select: "-viaje",
+                    populate: [
+                        {
+                            path: "chofer",
+                            select: "nombre apellido empresa",
+                            populate: {
+                                path: "empresa",
+                                select: "razonSocial"
+                            }
+                        },
+                        {
+                            path: "vehiculo",
+                            select: "patente -_id"
+                        }
+                    ]
+                }
+            ]);
+        }
+
+        const viajes = await viajesQuery;
+
+        res.status(200).json(viajes);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener los viajes", details: error.message });
+    }
+};
+
 viajeController.getViajes = getViajes;
 
 const getViajeById = async (req, res) => {
@@ -25,83 +75,5 @@ const getViajeById = async (req, res) => {
     res.status(200).json(id);
 };
 viajeController.getViajeById = getViajeById;
-
-const asignacionDelViajeConId = async (req, res) => {
-    const id = req.id;
-    const asignacionDelViaje = await Viaje.findOne(id).populate([
-        {
-            path: "asignacion",
-            model: "Asignacion",
-            select: "-viaje",
-            populate: {
-                path: "chofer",
-                select: "-empresa"
-            }
-        },
-        {
-            path: "asignacion",
-            model: "Asignacion",
-            select: "-viaje",
-            populate: {
-                path: "vehiculo",
-                select: "patente -_id" //se debe seleccionar dentro del select el atributo de la tabla, espacios para agregar otros atributos
-            }
-        }
-    ]);
-    res.status(200).json(asignacionDelViaje)
-};
-
-viajeController.asignacionDelViajeConId = asignacionDelViajeConId;
-
-const getListaDeViajes = async (req, res) => {
-    try {
-        const viajes = await Viaje.find().populate([
-            {
-                path: "depositoOrigen",
-                model: "Deposito",
-                select: "localizacion",
-                populate: {
-                    path: "localizacion",
-                    select: "provinciaOestado país -_id"
-                }
-            },
-            {
-                path: "depositoDestino",
-                model: "Deposito",
-                select: "localizacion",
-                populate: {
-                    path: "localizacion",
-                    select: "provinciaOestado país -_id"
-                }
-            },
-            {
-                path: "asignacion",
-                model: "Asignacion",
-                select: "-viaje",
-                populate: [
-                    {
-                        path: "chofer",
-                        select: "nombre apellido empresa",
-                        populate: {
-                            path: "empresa", // Aquí poblas empresa dentro de chofer
-                            select: "razonSocial" // Solo traemos la razón social
-                        }
-                    },
-                    {
-                        path: "vehiculo",
-                        select: "patente -_id"
-                    }
-                ]
-            }
-
-        ]);
-
-        res.status(200).json(viajes);
-    } catch (error) {
-        res.status(500).json({ message: "Error al obtener la lista de viajes", details: error.message });
-    }
-};
-viajeController.getListaDeViajes = getListaDeViajes;
-
 
 module.exports = viajeController;
