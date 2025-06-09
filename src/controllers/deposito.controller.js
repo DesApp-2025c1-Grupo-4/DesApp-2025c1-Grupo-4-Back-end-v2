@@ -54,6 +54,7 @@ depositoController.addDeposito = addDeposito;
 
 const getDepositos = async (req,res) => {
     const deposito = await Deposito.find()
+        .populate('localizacion', 'calle número')
     res.status(200).json(deposito)
 }
 depositoController.getDepositos = getDepositos;
