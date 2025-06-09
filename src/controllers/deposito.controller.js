@@ -54,14 +54,19 @@ depositoController.addDeposito = addDeposito;
 
 const getDepositos = async (req,res) => {
     const deposito = await Deposito.find()
-        .populate('localizacion', 'calle número')
+        .populate('localizacion', 'calle número -_id')
     res.status(200).json(deposito)
 }
 depositoController.getDepositos = getDepositos;
 
 const getDepositoById = async (req,res) => {
     const id = req.id; // Ya viene del middleware
-    res.status(200).json(id);
+    const deposito = await Deposito.findById(id).populate('localizacion', 'calle número -_id');
+
+        if (!deposito) {
+            return res.status(404).json({ mensaje: 'Depósito no encontrado' });
+        }
+    res.status(200).json(deposito);
 };
 depositoController.getDepositoById = getDepositoById;
 
