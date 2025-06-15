@@ -1,5 +1,4 @@
-const {Deposito, Localizacion} = require('../models');
-const {addLocalizacion} = require('./localizacion.controller')
+const {Deposito} = require('../models');
 const depositoController = {}
 const mongoose = require('../db/server').mongoose;
 

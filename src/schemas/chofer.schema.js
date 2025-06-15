@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import { Types } from 'mongoose';
+const Joi = require('joi')
+const Types = require('mongoose');
 
 // Licencias (no se cual es para cada cosa??)
 const TIPO_LICENCIAS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'C3', 'D1', 'D2', 'E'];
@@ -45,7 +45,7 @@ const licenciaSchema = Joi.object({
 });
 
 // Main Joi schema for the driver
-export const choferSchema = Joi.object({
+const choferSchema = Joi.object({
   nombre: Joi.string().trim().max(50).required().messages({
     'string.empty': 'El nombre es requerido',
     'string.max': 'El nombre no puede exceder los 50 caracteres',
@@ -82,7 +82,10 @@ export const choferSchema = Joi.object({
 });
 
 // Validacion para update
-export const choferUpdateSchema = choferSchema.fork(
+const choferUpdateSchema = choferSchema.fork(
   ['nombre', 'apellido', 'dni_identificacion', 'fecha_nacimiento', 'empresa', 'licencia'],
   (schema) => schema.optional()
 );
+
+module.exports = choferSchema
+module.exports = choferUpdateSchema

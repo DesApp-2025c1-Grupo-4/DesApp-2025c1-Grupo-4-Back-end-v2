@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import { Types } from 'mongoose';
+const Joi = require('joi')
+const Types = require('mongoose');
 
 // Custom validation for ObjectId
 const objectId = Joi.string().custom((value, helpers) => {
@@ -32,7 +32,7 @@ const capacidadCargaSchema = Joi.object({
 });
 
 // Schema principal
-export const vehiculoSchema = Joi.object({
+const vehiculoSchema = Joi.object({
   empresa: objectId
     .required()
     .messages({
@@ -85,7 +85,10 @@ export const vehiculoSchema = Joi.object({
 });
 
 // Update schema
-export const vehiculoUpdateSchema = vehiculoSchema.fork(
+const vehiculoUpdateSchema = vehiculoSchema.fork(
   ['empresa', 'patente', 'marca', 'modelo', 'anio', 'capacidad_carga', 'tipo_vehiculo'],
   (schema) => schema.optional()
 );
+
+module.exports = vehiculoSchema
+module.exports = vehiculoUpdateSchema

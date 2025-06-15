@@ -1,4 +1,4 @@
-import Joi from 'joi';
+const Joi = require('joi')
 
 const TIPO_EMPRESA = ['S.R.L', 'S.A', 'S.A.S', 'S.C', 'Unipersonal', 'Otro'];
 
@@ -35,7 +35,7 @@ const datosContactoSchema = Joi.object({
 });
 
 // Schema principal
-export const empresaSchema = Joi.object({
+const empresaSchema = Joi.object({
   nombre_empresa: Joi.string()
     .trim()
     .required()
@@ -67,7 +67,10 @@ export const empresaSchema = Joi.object({
 });
 
 // Update schema 
-export const empresaUpdateSchema = empresaSchema.fork(
+const empresaUpdateSchema = empresaSchema.fork(
   ['nombre_empresa', 'cuit_rut', 'domicilio_fiscal', 'datos_contacto', 'forma_juridica'],
   (schema) => schema.optional()
 );
+
+module.exports = empresaSchema
+module.exports = empresaUpdateSchema

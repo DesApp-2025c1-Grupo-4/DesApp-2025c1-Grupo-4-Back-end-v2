@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import { Types } from 'mongoose';
+const Joi = require('joi')
+const Types = require('mongoose');
 
 // Validacion fecha/hora (HH:MM)
 const timeFormat = Joi.string().pattern(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
@@ -81,7 +81,7 @@ const horariosSchema = Joi.object({
 });
 
 // Schema principal
-export const depositoSchema = Joi.object({
+const depositoSchema = Joi.object({
   localizacion: localizacionSchema.required().messages({
     'any.required': 'La localización es requerida'
   }),
@@ -102,7 +102,10 @@ export const depositoSchema = Joi.object({
 });
 
 // Update schema 
-export const depositoUpdateSchema = depositoSchema.fork(
+const depositoUpdateSchema = depositoSchema.fork(
   ['localizacion', 'tipo', 'personal_contacto', 'horarios'],
   (schema) => schema.optional()
 );
+
+module.exports = depositoSchema
+module.exports = depositoUpdateSchema

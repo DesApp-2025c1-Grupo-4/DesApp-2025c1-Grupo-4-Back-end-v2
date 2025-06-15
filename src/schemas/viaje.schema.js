@@ -1,5 +1,5 @@
-import Joi from 'joi';
-import { Types } from 'mongoose';
+const Joi = require('joi')
+const Types = require('mongoose');
 
 const objectId = Joi.string().custom((value, helpers) => {
   if (!Types.ObjectId.isValid(value)) {
@@ -25,7 +25,7 @@ const dateTimeValidation = Joi.string()
   });
 
 // Schema principal
-export const viajeSchema = Joi.object({
+const viajeSchema = Joi.object({
   guid_viaje: Joi.number()
     .required()
     .messages({
@@ -96,7 +96,7 @@ export const viajeSchema = Joi.object({
 });
 
 // Update schema 
-export const viajeUpdateSchema = viajeSchema.fork(
+const viajeUpdateSchema = viajeSchema.fork(
   [
     'guid_viaje',
     'deposito_origen',
@@ -110,3 +110,6 @@ export const viajeUpdateSchema = viajeSchema.fork(
   ],
   (schema) => schema.optional()
 );
+
+module.exports = viajeSchema
+module.exports = viajeUpdateSchema
