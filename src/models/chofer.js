@@ -1,5 +1,5 @@
-import mongoose, { model } from 'mongoose';
-const { Schema } = mongoose;
+const mongoose = require('mongoose')
+const {Schema} = require('mongoose')
 
 const LicenciaSchema = new Schema({
   numero: {
@@ -10,7 +10,7 @@ const LicenciaSchema = new Schema({
   tipos: {
     type: [String],
     required: true,
-    enum: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'D1', 'D2', 'E'], // no se cual es para manejar logistica y camiones?
+    enum: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'C3', 'D1', 'D2', 'E'], // no se cual es para manejar logistica y camiones?
     validate: {
       validator: function(v) {
         return v.length > 0; // al menos un tipo de licencia tiene que cargar
@@ -31,7 +31,7 @@ const LicenciaSchema = new Schema({
   }
 });
 
-const ChoferSchema = new Schema({
+const choferSchema = new Schema({
   nombre: {
     type: String,
     required: true,
@@ -67,8 +67,6 @@ const ChoferSchema = new Schema({
     type: LicenciaSchema,
     required: true
   }
-}, {
-  timestamps: true
 });
 
-export default model('Chofer', ChoferSchema);
+module.exports = mongoose.model('Chofer', choferSchema, 'choferes');

@@ -1,5 +1,5 @@
-import mongoose, { model } from 'mongoose';
-const { Schema } = mongoose;
+const mongoose = require('mongoose')
+const {Schema} = require('mongoose')
 
 const capacidadCargaSchema = new Schema({
   volumen: { type: Number, required: true },
@@ -43,4 +43,5 @@ const vehiculoSchema = new Schema({
   }
 });
 
-export default model('Vehiculo', vehiculoSchema);
+
+module.exports = mongoose.model('Vehiculo', vehiculoSchema);

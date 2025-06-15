@@ -1,7 +1,7 @@
-import mongoose, { model } from 'mongoose';
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const ViajeSchema = new Schema({
+const viajeSchema = new Schema({
   guid_viaje: {
     type: Number,
     required: true,
@@ -10,12 +10,12 @@ const ViajeSchema = new Schema({
   },
   deposito_origen: {
     type: Schema.Types.ObjectId,
-    ref: 'Deposito',
+    ref: 'Sitio',
     required: true
   },
   deposito_destino: {
     type: Schema.Types.ObjectId,
-    ref: 'Deposito',
+    ref: 'Sitio',
     required: true
   },
   inicio_viaje: {
@@ -51,7 +51,7 @@ const ViajeSchema = new Schema({
   estado: {
     type: String,
     required: true,
-    enum: ['planificado', 'en_transito', 'completado', 'demorado', 'incidente', 'cancelado'],
+    enum: ['planificado', 'en_progreso', 'completado', 'cancelado'],
     default: 'planificado'
   },
   empresa_asignada: {
@@ -69,18 +69,7 @@ const ViajeSchema = new Schema({
     ref: 'Vehiculo',
     required: true
   }
-}, {
-  timestamps: true,
-  toJSON: { virtuals: true }
 });
 
 
-/* Indexes
-ViajeSchema.index({ estado: 1 });
-ViajeSchema.index({ empresa_asignada: 1 });
-ViajeSchema.index({ chofer_asignado: 1 });
-ViajeSchema.index({ vehiculo_asignado: 1 });
-ViajeSchema.index({ inicio_viaje: 1 });
-ViajeSchema.index({ fin_viaje: 1 });*/
-
-export default model('Viaje', ViajeSchema);
+module.exports = mongoose.model('Viaje', viajeSchema);

@@ -1,5 +1,5 @@
-import mongoose, { model } from 'mongoose';
-const { Schema } = mongoose;
+const mongoose = require('mongoose')
+const {Schema} = require('mongoose')
 
 const LocalizacionSchema = new Schema({
   direccion: { 
@@ -90,9 +90,6 @@ const depositoSchema = new Schema({
     type: HorariosSchema,
     required: true
   }
-}, {
-  timestamps: true,
 });
 
-// Create and export the model
-export default model('Deposito', depositoSchema);
+module.exports = mongoose.model('Deposito', depositoSchema);

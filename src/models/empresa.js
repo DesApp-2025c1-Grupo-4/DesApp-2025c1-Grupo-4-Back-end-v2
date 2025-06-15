@@ -1,5 +1,5 @@
-import mongoose, { model } from 'mongoose';
-const { Schema } = mongoose;
+const mongoose = require('mongoose')
+const {Schema} = require('mongoose')
 
 const domicilioFiscalSchema = new Schema({
   calle: { type: String, required: true },
@@ -45,4 +45,4 @@ const empresaSchema = new Schema({
   },
 });
 
-export default model('Empresa', empresaSchema);
+module.exports = mongoose.model('Empresa', empresaSchema);

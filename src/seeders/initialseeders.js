@@ -1,7 +1,5 @@
-import { DateTime, Zone } from 'luxon';
-import mongoose from 'mongoose';
-import { Empresa, Chofer, Vehiculo, Deposito, Viaje } from '../models';
-
+const mongoose = require('mongoose')
+const {Empresa, Chofer, Vehiculo, Deposito, Viaje } = require('../models');
 
 async function SeedDatabase() {
 
@@ -172,85 +170,80 @@ async function SeedDatabase() {
     const SeedDepositos = async (empresas) => {
         const depositos = [
             {
-            localizacion: {
-                direccion: 'Av. Industrial 1234',
-                provincia_estado: 'Buenos Aires',
-                ciudad: 'La Matanza',
-                pais: 'Argentina'
-            },
-            tipo: 'propio',
-            personal_contacto: {
-                nombre: 'Roberto',
-                apellido: 'García',
-                telefono: '1144556677'
-            },
-            horarios: {
-                dias: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'],
-                desde: '08:00',
-                hasta: '18:00'
-            },
-            empresa: empresas[0]._id
-            },
-            {
-            localizacion: {
-                direccion: 'Ruta 9 Km 25',
-                provincia_estado: 'Pilar',
-                ciudad: 'Pilar',
-                pais: 'Argentina'
-            },
-            tipo: 'propio',
-            personal_contacto: {
-                nombre: 'María',
-                apellido: 'López',
-                telefono: '3515556677'
-            },
-            horarios: {
-                dias: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
-                desde: '07:00',
-                hasta: '20:00'
-            },
-            empresa: empresas[1]._id
+                localizacion: {
+                    direccion: 'Av. Industrial 1234',
+                    provincia_estado: 'Buenos Aires',
+                    ciudad: 'La Matanza',
+                    pais: 'Argentina'
+                },
+                tipo: 'propio',
+                personal_contacto: {
+                    nombre: 'Roberto',
+                    apellido: 'García',
+                    telefono: '1144556677'
+                },
+                horarios: {
+                    dias: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'],
+                    desde: '08:00',
+                    hasta: '18:00'
+                },
             },
             {
-            localizacion: {
-                direccion: 'Italia 168',
-                provincia_estado: 'CABA',
-                ciudad: 'Caballito',
-                pais: 'Argentina'
+                localizacion: {
+                    direccion: 'Ruta 9 Km 25',
+                    provincia_estado: 'Pilar',
+                    ciudad: 'Pilar',
+                    pais: 'Argentina'
+                },
+                tipo: 'propio',
+                personal_contacto: {
+                    nombre: 'María',
+                    apellido: 'López',
+                    telefono: '3515556677'
+                },
+                horarios: {
+                    dias: ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+                    desde: '07:00',
+                    hasta: '20:00'
+                },
             },
-            tipo: 'tercerizado',
-            personal_contacto: {
-                nombre: 'Eduardo',
-                apellido: 'Rossetti',
-                telefono: '1122334455'
-            },
-            horarios: {
-                dias: ['lunes', 'martes'],
-                desde: '07:00',
-                hasta: '20:00'
-            },
-            empresa: empresas[1]._id
-            },
-            ,
             {
-            localizacion: {
-                direccion: 'Don Bosco 4500',
-                provincia_estado: 'Provincia de Buenos Aires',
-                ciudad: 'Bahía Blanca',
-                pais: 'Argentina'
+                localizacion: {
+                    direccion: 'Italia 168',
+                    provincia_estado: 'CABA',
+                    ciudad: 'Caballito',
+                    pais: 'Argentina'
+                },
+                tipo: 'tercerizado',
+                personal_contacto: {
+                    nombre: 'Eduardo',
+                    apellido: 'Rossetti',
+                    telefono: '1122334455'
+                },
+                horarios: {
+                    dias: ['lunes', 'martes'],
+                    desde: '07:00',
+                    hasta: '20:00'
+                },
             },
-            tipo: 'tercerizado',
-            personal_contacto: {
-                nombre: 'Oscar',
-                apellido: 'Prete',
-                telefono: '1122334455'
-            },
-            horarios: {
-                dias: ['lunes', 'martes'],
-                desde: '08:00',
-                hasta: '23:00'
-            },
-            empresa: empresas[0]._id
+            {
+                localizacion: {
+                    direccion: 'Don Bosco 4500',
+                    provincia_estado: 'Provincia de Buenos Aires',
+                    ciudad: 'Bahía Blanca',
+                    pais: 'Argentina'
+                },
+                tipo: 'tercerizado',
+                personal_contacto: {
+                    nombre: 'Oscar',
+                    apellido: 'Prete',
+                    telefono: '1122334455'
+                },
+                horarios: {
+                    dias: ['lunes', 'martes'],
+                    desde: '08:00',
+                    hasta: '23:00'
+                },
             },
         ];
 
@@ -312,4 +305,4 @@ async function SeedDatabase() {
     });
 }
 
-export default SeedDatabase;
+module.exports = SeedDatabase;
