@@ -1,16 +1,73 @@
-const Joi = require('joi')
+import Joi from 'joi';
 
-const empresaSchema = Joi.object().keys(
-    {
-    cuit: Joi.string().min(11).max(11).required().messages({
-        "any.required":"nombre es requerido",
-        "string.min": "El CUIT debe tener como mínimo {#limit} caracteres",
-        "string.max": "El CUIT debe tener como máximo {#limit} caracteres",
-        "string.empty": "El CUIT no puede ser vacio"
+const TIPO_EMPRESA = ['S.R.L', 'S.A', 'S.A.S', 'S.C', 'Unipersonal', 'Otro'];
+
+// Domicilio schema
+const domicilioFiscalSchema = Joi.object({
+  calle: Joi.string().required().messages({
+    'string.empty': 'La calle es requerida',
+    'any.required': 'La calle es requerida'
+  }),
+  ciudad: Joi.string().required().messages({
+    'string.empty': 'La ciudad es requerida',
+    'any.required': 'La ciudad es requerida'
+  }),
+  provincia: Joi.string().required().messages({
+    'string.empty': 'La provincia es requerida',
+    'any.required': 'La provincia es requerida'
+  }),
+  pais: Joi.string().default('Argentina')
+});
+
+// datos de contacto schema
+const datosContactoSchema = Joi.object({
+  telefono: Joi.string().required().messages({
+    'string.empty': 'El teléfono es requerido',
+    'any.required': 'El teléfono es requerido'
+  }),
+  mail: Joi.string()
+    .email()
+    .required()
+    .messages({
+      'string.email': 'Email no válido',
+      'any.required': 'El email es requerido'
     })
+});
 
-}).unknown(false).messages ({
-    'object.unknown': 'El atributo {#label} no está permitido.'
-})
+// Schema principal
+export const empresaSchema = Joi.object({
+  nombre_empresa: Joi.string()
+    .trim()
+    .required()
+    .messages({
+      'string.empty': 'El nombre de la empresa es requerido',
+      'any.required': 'El nombre de la empresa es requerido'
+    }),
+  cuit_rut: Joi.string()
+    .pattern(/^\d{2}-\d{8}-\d{1}$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'CUIT no válido (formato: XX-XXXXXXXX-X)',
+      'any.required': 'El CUIT/RUT es requerido'
+    }),
+  domicilio_fiscal: domicilioFiscalSchema.required().messages({
+    'any.required': 'El domicilio fiscal es requerido'
+  }),
+  datos_contacto: datosContactoSchema.required().messages({
+    'any.required': 'Los datos de contacto son requeridos'
+  }),
+  forma_juridica: Joi.string()
+    .valid(...TIPO_EMPRESA)
+    .default('S.R.L')
+    .required()
+    .messages({
+      'any.only': `La forma jurídica debe ser una de: ${TIPO_EMPRESA.join(', ')}`,
+      'any.required': 'La forma jurídica es requerida'
+    })
+});
 
-module.exports = empresaSchema
+// Update schema 
+export const empresaUpdateSchema = empresaSchema.fork(
+  ['nombre_empresa', 'cuit_rut', 'domicilio_fiscal', 'datos_contacto', 'forma_juridica'],
+  (schema) => schema.optional()
+);

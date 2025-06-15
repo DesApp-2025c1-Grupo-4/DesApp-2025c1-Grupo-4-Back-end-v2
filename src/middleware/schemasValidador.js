@@ -8,4 +8,4 @@ const schemasValidador = (schema) => {
     }
 }
 
-module.exports = schemasValidador 
+export default schemasValidador 

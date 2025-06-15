@@ -4,7 +4,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger_output.json');
 require('dotenv').config();
 const { connectToDatabase } = require('./db/server');
-const initialEmpresa = require('./seeders/initialseeders');
+const initialEmpresa = require('./seeders/initialseeders').default;
 
 const app = express();
 app.use(express.json());

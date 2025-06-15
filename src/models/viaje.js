@@ -1,38 +1,86 @@
-const mongoose = require('mongoose')
-const {Schema} = require('mongoose')
-const { DateTime } = require("luxon");
-const AutoIncrement = require('mongoose-sequence')(mongoose);
+import mongoose, { model } from 'mongoose';
+const { Schema } = mongoose;
 
-const viajeSchema = new mongoose.Schema({
-    _id: {
-        type: Number
-    },
-    inicioViaje: {
-        type: Schema.Types.Date,
-        required: true
-    },
-    llegadaViaje: {
-        type: Schema.Types.Date,
-        required: true
-    },
-    estado: {
-        type: Schema.Types.String,
-        required: true
-    },
-    depositoOrigen: {type: Number, ref: 'Deposito'},
-    depositoDestino: {type: Number, ref: 'Deposito'},
-    asignacion: {type: Number, ref: 'Asignacion'}
-},{
-    _id: false,
-    collection: 'Viaje', // Especifica el nombre en singular
-})
-
-viajeSchema.plugin(AutoIncrement, {id: 'Viaje', inc_field: '_id', start_seq: 0})
-
-viajeSchema.set('toJSON', {
-    transform: (_, ret) => {
-        delete ret.__v
+const ViajeSchema = new Schema({
+  guid_viaje: {
+    type: Number,
+    required: true,
+    unique: true,
+    index: true
+  },
+  deposito_origen: {
+    type: Schema.Types.ObjectId,
+    ref: 'Deposito',
+    required: true
+  },
+  deposito_destino: {
+    type: Schema.Types.ObjectId,
+    ref: 'Deposito',
+    required: true
+  },
+  inicio_viaje: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function(v) {
+        return /^\d{2}\/\d{2}\/\d{4} ([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v);
+      },
+      message: 'Formato de fecha/hora inválido (DD/MM/YYYY HH:MM)'
     }
-})
+  },
+  fin_viaje: {
+    type: String,
+    required: true,
+    validate: [
+      {
+        validator: function(v) {
+          return /^\d{2}\/\d{2}\/\d{4} ([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v);
+        },
+        message: 'Formato de fecha/hora inválido (DD/MM/YYYY HH:MM)'
+      },
+      {
+        validator: function(v) {
+          const start = new Date(this.inicio_viaje.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1'));
+          const end = new Date(v.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1'));
+          return end > start;
+        },
+        message: 'La fecha/hora de fin debe ser posterior a la de inicio'
+      }
+    ]
+  },
+  estado: {
+    type: String,
+    required: true,
+    enum: ['planificado', 'en_transito', 'completado', 'demorado', 'incidente', 'cancelado'],
+    default: 'planificado'
+  },
+  empresa_asignada: {
+    type: Schema.Types.ObjectId,
+    ref: 'Empresa',
+    required: true
+  },
+  chofer_asignado: {
+    type: Schema.Types.ObjectId,
+    ref: 'Chofer',
+    required: true
+  },
+  vehiculo_asignado: {
+    type: Schema.Types.ObjectId,
+    ref: 'Vehiculo',
+    required: true
+  }
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true }
+});
 
-module.exports = mongoose.model('Viaje', viajeSchema);
+
+/* Indexes
+ViajeSchema.index({ estado: 1 });
+ViajeSchema.index({ empresa_asignada: 1 });
+ViajeSchema.index({ chofer_asignado: 1 });
+ViajeSchema.index({ vehiculo_asignado: 1 });
+ViajeSchema.index({ inicio_viaje: 1 });
+ViajeSchema.index({ fin_viaje: 1 });*/
+
+export default model('Viaje', ViajeSchema);

@@ -1,40 +1,48 @@
-const mongoose = require('mongoose')
-const {Schema} = require('mongoose')
+import mongoose, { model } from 'mongoose';
+const { Schema } = mongoose;
 
-const empresaSchema = new mongoose.Schema({
-    cuit: {
-        type: Schema.Types.BigInt,
-        required: true
-    },
-    razonSocial: {
-        type: Schema.Types.String,
-        required: true
-    },
-    domicilio: {
-        type: Schema.Types.String,
-        required: true
-    },
-    contacto: {
-        type: Schema.Types.BigInt,
-        required: true
-    },
-    choferes: [{type: Schema.Types.ObjectId, ref: 'Chofer'}]
-
-},{
-  collection: 'Empresa', // Especifica el nombre en singular
+const domicilioFiscalSchema = new Schema({
+  calle: { type: String, required: true },
+  ciudad: { type: String, required: true },
+  provincia: { type: String, required: true },
+  pais: { type: String, required: true, default: 'Argentina' }
 });
 
-empresaSchema.set('toJSON', {
-    transform: (_, ret) => {
-        delete ret.__v;
-        if(ret.cuit !== undefined){
-            ret.cuit = ret.cuit.toString();
-        }        
+const datosContactoSchema = new Schema({
+  telefono: { type: String, required: true },
+  mail: { 
+    type: String, 
+    required: true,
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email no válido']
+  }
+});
 
-        if (ret.contacto !== undefined) {
-            ret.contacto = ret.contacto.toString();
-        }
-    }
-})
+const empresaSchema = new Schema({
+  nombre_empresa: { 
+    type: String, 
+    required: true,
+    trim: true
+  },
+  cuit_rut: {
+    type: String,
+    required: true,
+    unique: true,
+    match: [/^\d{2}-\d{8}-\d{1}$/, 'CUIT no válido (formato: XX-XXXXXXXX-X)']
+  },
+  domicilio_fiscal: {
+    type: domicilioFiscalSchema,
+    required: true
+  },
+  datos_contacto: {
+    type: datosContactoSchema,
+    required: true
+  },
+  forma_juridica: {
+    type: String,
+    required: true,
+    enum: ['S.R.L', 'S.A', 'S.A.S', 'S.C', 'Unipersonal', 'Otro'],
+    default: 'S.R.L'
+  },
+});
 
-module.exports = mongoose.model('Empresa', empresaSchema);
+export default model('Empresa', empresaSchema);

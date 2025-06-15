@@ -1,31 +1,108 @@
-const Joi = require('joi')
-const localizacionSchema = require('./localizacion.schema')
+import Joi from 'joi';
+import { Types } from 'mongoose';
 
-const depositoSinLocalizacionSchema = Joi.object().keys(
-    {
-    tipo: Joi.string().min(1).max(15).required().messages({
-        "any.required":"El tipo es requerida",
-        "string.min": "El tipo debe tener como mínimo {#limit} caracteres",
-        "string.max": "El tipo debe tener como máximo {#limit} caracteres",
-        "string.empty": "El tipo no puede ser vacía"
-    }),
+// Validacion fecha/hora (HH:MM)
+const timeFormat = Joi.string().pattern(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
+  .messages({
+    'string.pattern.base': 'Formato de hora inválido (HH:MM)'
+  });
 
-    horarios: Joi.string().required().messages({
-        "any.required": "El horario es requerido",
-        "string.empty": "El horario no puede ser vacío"
-    }),
-    contacto: Joi.number().integer().required().messages({
-        "any.required": "El contacto es requerido",
-        "number.base": "El contacto debe ser un número entero"
-    }),
-    
-    localizacion: Joi.number().optional()
+const objectId = Joi.string().custom((value, helpers) => {
+  if (!Types.ObjectId.isValid(value)) {
+    return helpers.error('any.invalid');
+  }
+  return value;
+}, 'ObjectId Validation');
 
+const DIAS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+
+// Localizacion schema
+const localizacionSchema = Joi.object({
+  direccion: Joi.string().trim().required().messages({
+    'string.empty': 'La dirección es requerida',
+    'any.required': 'La dirección es requerida'
+  }),
+  provincia_estado: Joi.string().required().messages({
+    'string.empty': 'La provincia/estado es requerida',
+    'any.required': 'La provincia/estado es requerida'
+  }),
+  ciudad: Joi.string().required().messages({
+    'string.empty': 'La ciudad es requerida',
+    'any.required': 'La ciudad es requerida'
+  }),
+  pais: Joi.string().default('Argentina')
 });
 
-const depositoSchema = depositoSinLocalizacionSchema.concat(localizacionSchema)
-    .messages ({
-        'object.unknown': 'El atributo {#label} no está permitido.'
+// Contacto personal schema
+const personalContactoSchema = Joi.object({
+  nombre: Joi.string().trim().required().messages({
+    'string.empty': 'El nombre es requerido',
+    'any.required': 'El nombre es requerido'
+  }),
+  apellido: Joi.string().trim().required().messages({
+    'string.empty': 'El apellido es requerido',
+    'any.required': 'El apellido es requerido'
+  }),
+  telefono: Joi.string()
+    .pattern(/^[0-9]{10,15}$/)
+    .required()
+    .messages({
+      'string.pattern.base': 'El teléfono debe tener entre 10 y 15 dígitos',
+      'any.required': 'El teléfono es requerido'
     })
+});
 
-module.exports = depositoSchema
+// Horarios Schema
+const horariosSchema = Joi.object({
+  dias: Joi.array()
+    .items(Joi.string().valid(...DIAS))
+    .min(1)
+    .required()
+    .messages({
+      'array.min': 'Debe especificar al menos un día',
+      'any.only': `Los días deben ser: ${DIAS.join(', ')}`,
+      'any.required': 'Los días son requeridos'
+    }),
+  desde: timeFormat.required().messages({
+    'any.required': 'La hora de apertura es requerida'
+  }),
+  hasta: timeFormat.required()
+    .custom((value, helpers) => {
+      const { desde } = helpers.state.ancestors[0];
+      if (value <= desde) {
+        return helpers.error('any.invalid');
+      }
+      return value;
+    })
+    .messages({
+      'any.required': 'La hora de cierre es requerida',
+      'any.invalid': 'La hora de cierre debe ser posterior a la de apertura'
+    })
+});
+
+// Schema principal
+export const depositoSchema = Joi.object({
+  localizacion: localizacionSchema.required().messages({
+    'any.required': 'La localización es requerida'
+  }),
+  tipo: Joi.string()
+    .valid('propio', 'tercerizado', 'temporal', 'otro')
+    .default('propio')
+    .required()
+    .messages({
+      'any.only': 'El tipo debe ser: propio, tercerizado, temporal u otro',
+      'any.required': 'El tipo es requerido'
+    }),
+  personal_contacto: personalContactoSchema.required().messages({
+    'any.required': 'El personal de contacto es requerido'
+  }),
+  horarios: horariosSchema.required().messages({
+    'any.required': 'Los horarios son requeridos'
+  })
+});
+
+// Update schema 
+export const depositoUpdateSchema = depositoSchema.fork(
+  ['localizacion', 'tipo', 'personal_contacto', 'horarios'],
+  (schema) => schema.optional()
+);
