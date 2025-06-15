@@ -10,12 +10,12 @@ const viajeSchema = new Schema({
   },
   deposito_origen: {
     type: Schema.Types.ObjectId,
-    ref: 'Sitio',
+    ref: 'Deposito',
     required: true
   },
   deposito_destino: {
     type: Schema.Types.ObjectId,
-    ref: 'Sitio',
+    ref: 'Deposito',
     required: true
   },
   inicio_viaje: {
@@ -69,7 +69,8 @@ const viajeSchema = new Schema({
     ref: 'Vehiculo',
     required: true
   }
-});
+},
+{ versionKey: false });
 
 
 module.exports = mongoose.model('Viaje', viajeSchema);

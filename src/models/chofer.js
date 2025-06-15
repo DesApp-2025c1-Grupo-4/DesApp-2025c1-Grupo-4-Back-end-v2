@@ -29,7 +29,8 @@ const LicenciaSchema = new Schema({
     fileName: String, 
     size: Number,        
   }
-});
+},
+{ versionKey: false });
 
 const choferSchema = new Schema({
   nombre: {
@@ -54,6 +55,10 @@ const choferSchema = new Schema({
     type: Date,
     required: true
   },
+  activo: {
+    type: Boolean,
+    required: true
+  },
   vehiculo_defecto: {
     type: Schema.Types.ObjectId,
     ref: 'Vehiculo'
@@ -67,6 +72,8 @@ const choferSchema = new Schema({
     type: LicenciaSchema,
     required: true
   }
-});
+}, 
+{ versionKey: false},
+);
 
 module.exports = mongoose.model('Chofer', choferSchema, 'choferes');

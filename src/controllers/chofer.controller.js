@@ -2,6 +2,15 @@ const {Chofer} = require('../models');
 const choferController = {}
 const mongoose = require('../db/server').mongoose;
 
+
+//GET
+const getChoferes = async (req,res) => {
+    const choferes = await Chofer.find().populate('empresa', 'nombre_empresa -_id');
+    res.status(200).json(choferes)
+}
+choferController.getChoferes = getChoferes;
+
+//POST
 const addChofer = async (req,res) => {
     const choferInf = req.body
     try{
@@ -14,17 +23,9 @@ const addChofer = async (req,res) => {
 }
 choferController.addChofer = addChofer;
 
-const getChoferes = async (req,res) => {
-    const chofer = await Chofer.find().select('-asignaciones')
-    res.status(200).json(chofer)
-}
-choferController.getChoferes = getChoferes;
+//PUT - Modificacion 
 
-const getChoferByCuil = async (req,res) => {
-    const chofer = req.chofer; // Ya viene del middleware
-    res.status(200).json(chofer);
-};
-choferController.getChoferByCuil = getChoferByCuil;
+//PATCH - Baja Logica
 
 
 module.exports = choferController;

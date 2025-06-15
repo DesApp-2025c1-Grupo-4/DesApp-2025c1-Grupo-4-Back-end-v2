@@ -2,8 +2,27 @@ const {Deposito} = require('../models');
 const depositoController = {}
 const mongoose = require('../db/server').mongoose;
 
-const addDeposito = async (req,res) => {
+//GET
+const getDepositos = async (req,res) => {
+    const deposito = await Deposito.find()
+    res.status(200).json(deposito)
+}
+depositoController.getDepositos = getDepositos;
 
+//GET BY id
+const getDepositoById = async (req,res) => {
+    const id = req.id; // Ya viene del middleware
+    const deposito = await Deposito.findById(id);
+
+        if (!deposito) {
+            return res.status(404).json({ mensaje: 'Depósito no encontrado' });
+        }
+    res.status(200).json(deposito);
+};
+depositoController.getDepositoById = getDepositoById;
+
+//POST
+const addDeposito = async (req,res) => {
     try{
         const {
             tipo,
@@ -48,26 +67,10 @@ const addDeposito = async (req,res) => {
         res.status(400).json({ mensaje: 'El servidor no puede procesar la solicitud' });
     }
 };
-    
 depositoController.addDeposito = addDeposito;
 
-const getDepositos = async (req,res) => {
-    const deposito = await Deposito.find()
-        .populate('localizacion', 'calle número -_id')
-    res.status(200).json(deposito)
-}
-depositoController.getDepositos = getDepositos;
+//UPDATE - Modificacion 
 
-const getDepositoById = async (req,res) => {
-    const id = req.id; // Ya viene del middleware
-    const deposito = await Deposito.findById(id).populate('localizacion', 'calle número -_id');
-
-        if (!deposito) {
-            return res.status(404).json({ mensaje: 'Depósito no encontrado' });
-        }
-    res.status(200).json(deposito);
-};
-depositoController.getDepositoById = getDepositoById;
-
+//UPDATE - Baja Logica
 
 module.exports = depositoController;

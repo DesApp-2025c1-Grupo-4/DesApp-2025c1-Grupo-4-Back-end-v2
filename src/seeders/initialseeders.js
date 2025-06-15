@@ -33,7 +33,8 @@ async function SeedDatabase() {
                 telefono: '1122334455',
                 mail: 'contacto@transportesarg.com.ar'
             },
-            forma_juridica: 'S.A'
+            forma_juridica: 'S.A',
+            activo: true
             },
             {
                 nombre_empresa: 'Prots S.R.L.',
@@ -48,7 +49,8 @@ async function SeedDatabase() {
                 telefono: '1166531402',
                 mail: 'comercial@prots.com.ar'
             },
-            forma_juridica: 'S.R.L'
+            forma_juridica: 'S.R.L',
+            activo: true
             }
         ];
 
@@ -66,6 +68,7 @@ async function SeedDatabase() {
             dni_identificacion: '30123456',
             fecha_nacimiento: new Date('1980-05-15'),
             empresa: empresas[0]._id,
+            activo: true,
             licencia: {
                 numero: 'AB123456',
                 tipos: ['C2', 'C3'],
@@ -84,6 +87,7 @@ async function SeedDatabase() {
             dni_identificacion: '32987654',
             fecha_nacimiento: new Date('1975-10-22'),
             empresa: empresas[1]._id,
+            activo: true,
             licencia: {
                 numero: 'CD789012',
                 tipos: ['C1', 'C2'],
@@ -102,6 +106,7 @@ async function SeedDatabase() {
             dni_identificacion: '36797988',
             fecha_nacimiento: new Date('1992-10-14'),
             empresa: empresas[1]._id,
+            activo: true,
             licencia: {
                 numero: 'CD789015',
                 tipos: ['C1', 'C2'],
@@ -133,7 +138,8 @@ async function SeedDatabase() {
             volumen: 80,
             peso: 40000
         },
-        tipo_vehiculo: 'Camión'
+        tipo_vehiculo: 'Camión',
+        activo: true
         },
         {
         empresa: empresas[1]._id,
@@ -145,7 +151,8 @@ async function SeedDatabase() {
             volumen: 70,
             peso: 38000
         },
-        tipo_vehiculo: 'Camión'
+        tipo_vehiculo: 'Camión',
+        activo: true
         },
         {
         empresa: empresas[1]._id,
@@ -157,7 +164,8 @@ async function SeedDatabase() {
             volumen: 90,
             peso: 48000
         },
-        tipo_vehiculo: 'Camión'
+        tipo_vehiculo: 'Camión',
+        activo: true
         },];
 
         const vehiculosCreados = await Vehiculo.insertMany(vehiculos);
@@ -177,6 +185,7 @@ async function SeedDatabase() {
                     pais: 'Argentina'
                 },
                 tipo: 'propio',
+                activo: true,
                 personal_contacto: {
                     nombre: 'Roberto',
                     apellido: 'García',
@@ -196,6 +205,7 @@ async function SeedDatabase() {
                     pais: 'Argentina'
                 },
                 tipo: 'propio',
+                activo: true,
                 personal_contacto: {
                     nombre: 'María',
                     apellido: 'López',
@@ -215,6 +225,7 @@ async function SeedDatabase() {
                     pais: 'Argentina'
                 },
                 tipo: 'tercerizado',
+                activo: true,
                 personal_contacto: {
                     nombre: 'Eduardo',
                     apellido: 'Rossetti',
@@ -234,6 +245,7 @@ async function SeedDatabase() {
                     pais: 'Argentina'
                 },
                 tipo: 'tercerizado',
+                activo: true,
                 personal_contacto: {
                     nombre: 'Oscar',
                     apellido: 'Prete',

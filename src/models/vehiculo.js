@@ -4,7 +4,8 @@ const {Schema} = require('mongoose')
 const capacidadCargaSchema = new Schema({
   volumen: { type: Number, required: true },
   peso: { type: Number, required: true }
-});
+},
+{ versionKey: false });
 
 const vehiculoSchema = new Schema({
   empresa: { 
@@ -40,8 +41,13 @@ const vehiculoSchema = new Schema({
     type: String, 
     required: true,
     enum: ['Camión', 'Furgón', 'Camioneta', "Auto", 'Otros']
-  }
-});
+  },
+  activo: {
+    type: Boolean,
+    required: true
+  },
+},
+{ versionKey: false });
 
 
 module.exports = mongoose.model('Vehiculo', vehiculoSchema);

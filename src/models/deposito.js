@@ -20,7 +20,8 @@ const LocalizacionSchema = new Schema({
     required: true,
     default: 'Argentina' 
   }
-});
+},
+{ versionKey: false });
 
 const PersonalContactoSchema = new Schema({
   nombre: { 
@@ -43,9 +44,9 @@ const PersonalContactoSchema = new Schema({
       message: props => `${props.value} no es un número de teléfono válido!`
     }
   }
-});
+},
+{ versionKey: false });
 
-// Sub-schema for working hours
 const HorariosSchema = new Schema({
   dias: {
     type: [String],
@@ -68,9 +69,10 @@ const HorariosSchema = new Schema({
     required: true,
     match: [/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Formato de hora inválido (HH:MM)']
   }
-});
+},
+{ versionKey: false });
 
-// Main schema
+// Schema principal
 const depositoSchema = new Schema({
   localizacion: {
     type: LocalizacionSchema,
@@ -82,6 +84,10 @@ const depositoSchema = new Schema({
     enum: ['propio', 'tercerizado', 'temporal', 'otro'],
     default: 'propio'
   },
+  activo: {
+    type: Boolean,
+    required: true
+  },
   personal_contacto: {
     type: PersonalContactoSchema,
     required: true
@@ -90,6 +96,7 @@ const depositoSchema = new Schema({
     type: HorariosSchema,
     required: true
   }
-});
+},
+{ versionKey: false });
 
 module.exports = mongoose.model('Deposito', depositoSchema);

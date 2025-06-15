@@ -25,7 +25,7 @@ const startServer = async () => {
     await initialEmpresa();
     console.log('Aplicación corriendo en el puerto:', PORT);
 
-    if (process.env.USE_SWAGGER === 'true') {
+    if (0 === 1) {
         const open = (await import('open')).default;
         await open(`http://localhost:${PORT}/api-docs`);
     }

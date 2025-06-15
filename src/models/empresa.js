@@ -6,7 +6,8 @@ const domicilioFiscalSchema = new Schema({
   ciudad: { type: String, required: true },
   provincia: { type: String, required: true },
   pais: { type: String, required: true, default: 'Argentina' }
-});
+},
+{ versionKey: false });
 
 const datosContactoSchema = new Schema({
   telefono: { type: String, required: true },
@@ -15,7 +16,8 @@ const datosContactoSchema = new Schema({
     required: true,
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email no válido']
   }
-});
+},
+{ versionKey: false });
 
 const empresaSchema = new Schema({
   nombre_empresa: { 
@@ -37,12 +39,17 @@ const empresaSchema = new Schema({
     type: datosContactoSchema,
     required: true
   },
+  activo: {
+    type: Boolean,
+    required: true
+  },
   forma_juridica: {
     type: String,
     required: true,
     enum: ['S.R.L', 'S.A', 'S.A.S', 'S.C', 'Unipersonal', 'Otro'],
     default: 'S.R.L'
   },
-});
+},
+{ versionKey: false });
 
 module.exports = mongoose.model('Empresa', empresaSchema);

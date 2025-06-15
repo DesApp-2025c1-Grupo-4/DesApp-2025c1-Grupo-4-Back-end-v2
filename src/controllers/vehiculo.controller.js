@@ -2,6 +2,22 @@ const {Vehiculo} = require('../models');
 const vehiculoController = {}
 const mongoose = require('../db/server').mongoose;
 
+
+//GET
+const getVehiculos = async (req,res) => {
+    const vehiculo = await Vehiculo.find().populate('empresa', 'nombre_empresa -_id');
+    res.status(200).json(vehiculo)
+}
+vehiculoController.getVehiculos = getVehiculos;
+
+//GET BY patente
+const getVehiculoByPatente = async (req,res) => {
+    const vehiculo = req.vehiculo; // Ya viene del middleware
+    res.status(200).json(vehiculo);
+};
+vehiculoController.getVehiculoByPatente = getVehiculoByPatente;
+
+//POST
 const addVehiculo = async (req,res) => {
     const vehiculoInf = req.body
     try{
@@ -14,16 +30,10 @@ const addVehiculo = async (req,res) => {
 }
 vehiculoController.addVehiculo = addVehiculo;
 
-const getVehiculos = async (req,res) => {
-    const vehiculo = await Vehiculo.find()
-    res.status(200).json(vehiculo)
-}
-vehiculoController.getVehiculos = getVehiculos;
 
-const getVehiculoByPatente = async (req,res) => {
-    const vehiculo = req.vehiculo; // Ya viene del middleware
-    res.status(200).json(vehiculo);
-};
-vehiculoController.getVehiculoByPatente = getVehiculoByPatente;
+//PUT - Modificacion 
+
+//PATCH - Baja Logica
+
 
 module.exports = vehiculoController;
