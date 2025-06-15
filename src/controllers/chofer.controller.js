@@ -5,7 +5,9 @@ const mongoose = require('../db/server').mongoose;
 
 //GET
 const getChoferes = async (req,res) => {
-    const choferes = await Chofer.find().populate('empresa', 'nombre_empresa -_id');
+    const choferes = await Chofer.find()
+    .populate('empresa', 'nombre_empresa -_id')
+    .populate('vehiculo_defecto', 'patente -_id');
     res.status(200).json(choferes)
 }
 choferController.getChoferes = getChoferes;

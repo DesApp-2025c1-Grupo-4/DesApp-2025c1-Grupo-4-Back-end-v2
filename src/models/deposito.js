@@ -81,8 +81,8 @@ const depositoSchema = new Schema({
   tipo: {
     type: String,
     required: true,
-    enum: ['propio', 'tercerizado', 'temporal', 'otro'],
-    default: 'propio'
+    enum: ['Propio', 'Tercerizado'],
+    default: 'Propio'
   },
   activo: {
     type: Boolean,

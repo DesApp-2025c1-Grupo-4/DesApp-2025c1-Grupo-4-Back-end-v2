@@ -58,72 +58,6 @@ async function SeedDatabase() {
         console.log(`${empresasCreadas.length} empresas creadas`);
         return empresasCreadas;
     };
-    
-    // Popular choferes
-    const SeedChoferes = async (empresas) => {
-        const choferes = [
-        {
-            nombre: 'Juan',
-            apellido: 'Pérez',
-            dni_identificacion: '30123456',
-            fecha_nacimiento: new Date('1980-05-15'),
-            empresa: empresas[0]._id,
-            activo: true,
-            licencia: {
-                numero: 'AB123456',
-                tipos: ['C2', 'C3'],
-                fecha_expiracion: '30/12/2025',
-                documento: {
-                    data: Buffer.from('sample-image-data'),
-                    contentType: 'image/jpeg',
-                    fileName: 'licencia_juan.jpg',
-                    size: 1024
-                }
-            }
-        },
-        {
-            nombre: 'Carlos',
-            apellido: 'Gómez',
-            dni_identificacion: '32987654',
-            fecha_nacimiento: new Date('1975-10-22'),
-            empresa: empresas[1]._id,
-            activo: true,
-            licencia: {
-                numero: 'CD789012',
-                tipos: ['C1', 'C2'],
-                fecha_expiracion: '15/06/2024',
-                documento: {
-                    data: Buffer.from('sample-image-data'),
-                    contentType: 'image/png',
-                    fileName: 'licencia_carlos.png',
-                    size: 2048
-                }
-            }
-        },
-        {
-            nombre: 'Juan',
-            apellido: 'Herrera',
-            dni_identificacion: '36797988',
-            fecha_nacimiento: new Date('1992-10-14'),
-            empresa: empresas[1]._id,
-            activo: true,
-            licencia: {
-                numero: 'CD789015',
-                tipos: ['C1', 'C2'],
-                fecha_expiracion: '15/06/2027',
-                documento: {
-                    data: Buffer.from('sample-image-data'),
-                    contentType: 'image/png',
-                    fileName: 'licencia_Juan.png',
-                    size: 2048
-                }
-            }
-        },];
-
-        const choferesCreados = await Chofer.insertMany(choferes);
-        console.log(`${choferesCreados.length} choferes creados`);
-        return choferesCreados;
-    };
 
     // Popular vehiculos
     const SeedVehiculos = async (empresas) => {
@@ -172,8 +106,7 @@ async function SeedDatabase() {
         console.log(`${vehiculosCreados.length} vehiculos creados`);
         return vehiculosCreados;
     };
-
-
+    
     // Popular depositos
     const SeedDepositos = async (empresas) => {
         const depositos = [
@@ -184,7 +117,7 @@ async function SeedDatabase() {
                     ciudad: 'La Matanza',
                     pais: 'Argentina'
                 },
-                tipo: 'propio',
+                tipo: 'Propio',
                 activo: true,
                 personal_contacto: {
                     nombre: 'Roberto',
@@ -204,7 +137,7 @@ async function SeedDatabase() {
                     ciudad: 'Pilar',
                     pais: 'Argentina'
                 },
-                tipo: 'propio',
+                tipo: 'Propio',
                 activo: true,
                 personal_contacto: {
                     nombre: 'María',
@@ -224,7 +157,7 @@ async function SeedDatabase() {
                     ciudad: 'Caballito',
                     pais: 'Argentina'
                 },
-                tipo: 'tercerizado',
+                tipo: 'Tercerizado',
                 activo: true,
                 personal_contacto: {
                     nombre: 'Eduardo',
@@ -244,7 +177,7 @@ async function SeedDatabase() {
                     ciudad: 'Bahía Blanca',
                     pais: 'Argentina'
                 },
-                tipo: 'tercerizado',
+                tipo: 'Tercerizado',
                 activo: true,
                 personal_contacto: {
                     nombre: 'Oscar',
@@ -264,9 +197,78 @@ async function SeedDatabase() {
         return depositosCreados;
     };
 
+     // Popular choferes
+    const SeedChoferes = async (empresas, vehiculos) => {
+
+        const choferes = [
+        {
+            nombre: 'Juan',
+            apellido: 'Pérez',
+            dni_identificacion: '30123456',
+            fecha_nacimiento: new Date('1980-05-15'),
+            empresa: empresas[0]._id,
+            activo: true,
+            vehiculo_defecto: vehiculos[0]._id,
+            licencia: {
+                numero: 'AB123456',
+                tipos: ['C2', 'C3'],
+                fecha_expiracion: '30/12/2025',
+                documento: {
+                    data: Buffer.from('sample-image-data'),
+                    contentType: 'image/jpeg',
+                    fileName: 'licencia_juan.jpg',
+                    size: 1024
+                }
+            }
+        },
+        {
+            nombre: 'Carlos',
+            apellido: 'Gómez',
+            dni_identificacion: '32987654',
+            fecha_nacimiento: new Date('1975-10-22'),
+            empresa: empresas[1]._id,
+            activo: true,
+            vehiculo_defecto: vehiculos[1]._id,
+            licencia: {
+                numero: 'CD789012',
+                tipos: ['C1', 'C2'],
+                fecha_expiracion: '15/06/2024',
+                documento: {
+                    data: Buffer.from('sample-image-data'),
+                    contentType: 'image/png',
+                    fileName: 'licencia_carlos.png',
+                    size: 2048
+                }
+            }
+        },
+        {
+            nombre: 'Juan',
+            apellido: 'Herrera',
+            dni_identificacion: '36797988',
+            fecha_nacimiento: new Date('1992-10-14'),
+            empresa: empresas[1]._id,
+            activo: true,
+            vehiculo_defecto: vehiculos[2]._id,
+            licencia: {
+                numero: 'CD789015',
+                tipos: ['C1', 'C2'],
+                fecha_expiracion: '15/06/2027',
+                documento: {
+                    data: Buffer.from('sample-image-data'),
+                    contentType: 'image/png',
+                    fileName: 'licencia_Juan.png',
+                    size: 2048
+                }
+            }
+        },];
+
+        const choferesCreados = await Chofer.insertMany(choferes);
+        console.log(`${choferesCreados.length} choferes creados`);
+        return choferesCreados;
+    };
 
     // Popular viajes
-    const SeedViajes = async (empresas, choferes, vehiculos, depositos) => {
+    const SeedViajes = async (empresas, depositos, vehiculos, choferes) => {
         const viajes = [
             {
             guid_viaje: 1001,
@@ -302,10 +304,10 @@ async function SeedDatabase() {
         await limpiarBDD();
         
         const empresas = await SeedEmpresas();
-        const choferes = await SeedChoferes(empresas);
-        const vehiculos = await SeedVehiculos(empresas);
         const depositos = await SeedDepositos(empresas);
-        const viajes = await SeedViajes(empresas, choferes, vehiculos, depositos);
+        const vehiculos = await SeedVehiculos(empresas);
+        const choferes = await SeedChoferes(empresas, vehiculos);
+        const viajes = await SeedViajes(empresas, depositos, vehiculos, choferes);
         
         console.log('Base de datos poblada con éxito');
         };

@@ -86,11 +86,11 @@ const depositoSchema = Joi.object({
     'any.required': 'La localización es requerida'
   }),
   tipo: Joi.string()
-    .valid('propio', 'tercerizado', 'temporal', 'otro')
-    .default('propio')
+    .valid('Propio', 'Tercerizado')
+    .default('Propio')
     .required()
     .messages({
-      'any.only': 'El tipo debe ser: propio, tercerizado, temporal u otro',
+      'any.only': 'El tipo debe ser: Propio o tercerizado',
       'any.required': 'El tipo es requerido'
     }),
   personal_contacto: personalContactoSchema.required().messages({
