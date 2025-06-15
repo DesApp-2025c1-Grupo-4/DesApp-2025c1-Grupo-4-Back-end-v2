@@ -296,12 +296,10 @@ async function SeedDatabase() {
         const viajes = await SeedViajes(empresas, choferes, vehiculos, depositos);
         
         console.log('Base de datos poblada con éxito');
-        process.exit(0);
         };
 
         seed().catch(error => {
         console.error('Error al poblar la base de datos:', error);
-        process.exit(1);
     });
 }
 
