@@ -1,9 +1,10 @@
 const {Empresa} = require('../models');
 const empresaController = {}
 const mongoose = require('../db/server').mongoose;
+const ObjectId = require('mongodb').ObjectId;
 
 //GET
-const getEmpresas = async (req,res) => {
+const getEmpresas = async (res) => {
     const empresa = await Empresa.find()
     res.status(200).json(empresa)
 }
@@ -29,17 +30,30 @@ const addEmpresa = async (req,res) => {
 }
 empresaController.addEmpresa = addEmpresa;
 
+
 //PUT - Modificacion 
 
+
 //PATCH - Baja Logica
-const softDeleteEmpresa = async (id) => {
-  return this.findByIdAndUpdate(
-    id,
-    {
-      $set: { activo: false }
-    },
-    { new: true }
-  );
+const softDeleteEmpresa = async (req, res) => {
+ try {
+    const { cuit } = req.params;
+    
+    const empresa = await Empresa.findOneAndUpdate(
+      { cuit },
+      { 
+        $set: { activo: false } 
+      }
+    );
+
+    if (!empresa) {
+      return res.status(404).json({ message: 'Empresa no encontrada' });
+    }
+
+    res.status(200).json({message: 'Empresa borrada exitosamente.'});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 empresaController.softDeleteEmpresa = softDeleteEmpresa;
 
