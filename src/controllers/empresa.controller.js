@@ -1,7 +1,6 @@
 const {Empresa} = require('../models');
 const empresaController = {}
 const mongoose = require('../db/server').mongoose;
-const ObjectId = require('mongodb').ObjectId;
 
 //GET
 const getEmpresas = async (res) => {

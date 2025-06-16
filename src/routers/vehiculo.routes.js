@@ -10,5 +10,6 @@ const routes = Router()
 routes.get('/',VehiculoController.getVehiculos)
 routes.get('/:patente',validarPatenteVehiculo(Vehiculo),VehiculoController.getVehiculoByPatente)
 routes.post('/',schemasValidador(vehiculoSchema),VehiculoController.addVehiculo)
+routes.patch('/:patente/delete',VehiculoController.softDeleteVehiculo)
 
 module.exports = routes

@@ -7,5 +7,6 @@ const routes = Router()
 
 routes.get('/',ChoferController.getChoferes)
 routes.post('/',schemasValidador(choferSchema),ChoferController.addChofer)
+routes.patch('/:cuil/delete',ChoferController.softDeleteChofer)
 
 module.exports = routes

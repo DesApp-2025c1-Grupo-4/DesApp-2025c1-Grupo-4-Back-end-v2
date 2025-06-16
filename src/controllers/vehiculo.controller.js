@@ -34,6 +34,27 @@ vehiculoController.addVehiculo = addVehiculo;
 //PUT - Modificacion 
 
 //PATCH - Baja Logica
+const softDeleteVehiculo = async (req, res) => {
+ try {
+    const { patente } = req.params;
+    
+    const vehiculo = await Vehiculo.findOneAndUpdate(
+      { patente },
+      { 
+        $set: { activo: false } 
+      }
+    );
+
+    if (!vehiculo) {
+      return res.status(404).json({ message: 'Vehiculo no encontrado' });
+    }
+
+    res.status(200).json({message: 'Vehiculo borrado exitosamente.'});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+vehiculoController.softDeleteVehiculo = softDeleteVehiculo;
 
 
 module.exports = vehiculoController;
