@@ -202,7 +202,7 @@ async function SeedDatabase() {
         {
             nombre: 'Juan',
             apellido: 'Pérez',
-            dni_identificacion: '30123456',
+            cuil: '27301234561',
             fecha_nacimiento: new Date('1980-05-15'),
             empresa: empresas[0]._id,
             activo: true,
@@ -222,7 +222,7 @@ async function SeedDatabase() {
         {
             nombre: 'Carlos',
             apellido: 'Gómez',
-            dni_identificacion: '32987654',
+            cuil: '27329876541',
             fecha_nacimiento: new Date('1975-10-22'),
             empresa: empresas[1]._id,
             activo: true,
@@ -242,7 +242,7 @@ async function SeedDatabase() {
         {
             nombre: 'Juan',
             apellido: 'Herrera',
-            dni_identificacion: '36797988',
+            cuil: '27367979881',
             fecha_nacimiento: new Date('1992-10-14'),
             empresa: empresas[1]._id,
             activo: true,

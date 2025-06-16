@@ -56,16 +56,12 @@ const choferSchema = Joi.object({
     'string.max': 'El apellido no puede exceder los 50 caracteres',
     'any.required': 'El apellido es requerido'
   }),
-  dni_identificacion: Joi.alternatives()
-    .try(
-      Joi.string().pattern(/^\d{7,8}$/), // DNI Argentino
-      Joi.string().pattern(/^[a-zA-Z0-9]{5,20}$/) // ID para extranjeros ??
-    )
-    .required()
-    .messages({
-      'alternatives.match': 'El documento debe ser DNI (7-8 dígitos) o ID extranjero válido',
-      'any.required': 'El documento de identificación es requerido'
-    }),
+  cuil: Joi.string().min(11).max(11).required().messages({
+    "any.required":"nombre es requerido",
+    "string.min": "El CUIL debe tener como mínimo {#limit} caracteres",
+    "string.max": "El CUIL debe tener como máximo {#limit} caracteres",
+    "string.empty": "El CUIL no puede ser vacio"
+  }),
   fecha_nacimiento: Joi.date().max('now').required().messages({
     'date.base': 'Fecha de nacimiento inválida',
     'date.max': 'La fecha de nacimiento no puede ser futura',
@@ -83,7 +79,7 @@ const choferSchema = Joi.object({
 
 // Validacion para update
 const choferUpdateSchema = choferSchema.fork(
-  ['nombre', 'apellido', 'dni_identificacion', 'fecha_nacimiento', 'empresa', 'licencia'],
+  ['nombre', 'apellido', 'cuil', 'fecha_nacimiento', 'empresa', 'licencia'],
   (schema) => schema.optional()
 );
 

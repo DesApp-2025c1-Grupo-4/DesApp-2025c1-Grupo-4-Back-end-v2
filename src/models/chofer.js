@@ -45,11 +45,10 @@ const choferSchema = new Schema({
     trim: true,
     maxlength: 50
   },
-  dni_identificacion: {
+  cuil: {
     type: String,
     required: true,
-    unique: true,
-    match: [/^\d{7,8}$/, 'DNI debe contener 7 u 8 dígitos'] //Esto se puede sacar si no es con DNI y tiene otro tipo de Identificacion (extranjero)
+    unique: true
   },
   fecha_nacimiento: {
     type: Date,
