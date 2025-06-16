@@ -4,8 +4,8 @@
 ## 📌 Datos
 - Materia: Desarrollo de Aplicaciones (2025)
 - Universidad Nacional de Hurlingham
-- Docentes:
-- Alumnos: Paula Ricci
+- Docentes: Lombardi Carlos, Hernan Guzman, Schiffino Cristian 
+- Alumnos: Hereñú Luis, Lois Erika Patricia, Nicolaus Brian Hernan, Ricci Paula, Torres Marcelo Alejandro
 
 
 ## 🚀 Acerca del Proyecto
