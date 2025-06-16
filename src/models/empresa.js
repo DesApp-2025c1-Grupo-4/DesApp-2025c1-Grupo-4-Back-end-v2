@@ -25,11 +25,10 @@ const empresaSchema = new Schema({
     required: true,
     trim: true
   },
-  cuit_rut: {
+  cuit: {
     type: String,
     required: true,
-    unique: true,
-    match: [/^\d{2}-\d{8}-\d{1}$/, 'CUIT no válido (formato: XX-XXXXXXXX-X)']
+    unique: true
   },
   domicilio_fiscal: {
     type: domicilioFiscalSchema,

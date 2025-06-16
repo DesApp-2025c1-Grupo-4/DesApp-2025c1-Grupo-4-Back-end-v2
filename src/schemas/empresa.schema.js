@@ -43,12 +43,11 @@ const empresaSchema = Joi.object({
       'string.empty': 'El nombre de la empresa es requerido',
       'any.required': 'El nombre de la empresa es requerido'
     }),
-  cuit_rut: Joi.string()
-    .pattern(/^\d{2}-\d{8}-\d{1}$/)
-    .required()
-    .messages({
-      'string.pattern.base': 'CUIT no válido (formato: XX-XXXXXXXX-X)',
-      'any.required': 'El CUIT/RUT es requerido'
+    cuit: Joi.string().min(11).max(11).required().messages({
+      "any.required":"nombre es requerido",
+      "string.min": "El CUIT debe tener como mínimo {#limit} caracteres",
+      "string.max": "El CUIT debe tener como máximo {#limit} caracteres",
+      "string.empty": "El CUIT no puede ser vacio"
     }),
   domicilio_fiscal: domicilioFiscalSchema.required().messages({
     'any.required': 'El domicilio fiscal es requerido'
@@ -60,7 +59,7 @@ const empresaSchema = Joi.object({
 
 // Update schema 
 const empresaUpdateSchema = empresaSchema.fork(
-  ['nombre_empresa', 'cuit_rut', 'domicilio_fiscal', 'datos_contacto'],
+  ['nombre_empresa', 'cuit', 'domicilio_fiscal', 'datos_contacto'],
   (schema) => schema.optional()
 );
 

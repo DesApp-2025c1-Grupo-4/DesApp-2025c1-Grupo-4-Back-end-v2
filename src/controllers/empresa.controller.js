@@ -32,6 +32,16 @@ empresaController.addEmpresa = addEmpresa;
 //PUT - Modificacion 
 
 //PATCH - Baja Logica
+const softDeleteEmpresa = async (id) => {
+  return this.findByIdAndUpdate(
+    id,
+    {
+      $set: { activo: false }
+    },
+    { new: true }
+  );
+};
+empresaController.softDeleteEmpresa = softDeleteEmpresa;
 
 
 module.exports = empresaController;

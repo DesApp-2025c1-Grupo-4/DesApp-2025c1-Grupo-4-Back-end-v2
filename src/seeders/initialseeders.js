@@ -22,7 +22,7 @@ async function SeedDatabase() {
         const empresas = [
         {
             nombre_empresa: 'Transportes Argentinos S.A.',
-            cuit_rut: '30-12345678-9',
+            cuit: '30123456789',
             domicilio_fiscal: {
                 calle: 'Av. Corrientes 1234',
                 ciudad: 'Buenos Aires',
@@ -34,23 +34,22 @@ async function SeedDatabase() {
                 mail: 'contacto@transportesarg.com.ar'
             },
             activo: true
-            },
-            {
-                nombre_empresa: 'Prots S.R.L.',
-                cuit_rut: '30-71167184-2',
-                domicilio_fiscal: {
-                    calle: 'Pedro Reta 36',
-                    ciudad: 'Monte Grande',
-                    provincia: 'Provincia de Buenos Aires',
-                    pais: 'Argentina'
+        },
+        {
+            nombre_empresa: 'Prots S.R.L.',
+            cuit: '30711671842',
+            domicilio_fiscal: {
+                calle: 'Pedro Reta 36',
+                ciudad: 'Monte Grande',
+                provincia: 'Provincia de Buenos Aires',
+                pais: 'Argentina'
             },
             datos_contacto: {
                 telefono: '1166531402',
                 mail: 'comercial@prots.com.ar'
             },
             activo: true
-            }
-        ];
+        }];
 
         const empresasCreadas = await Empresa.insertMany(empresas);
         console.log(`${empresasCreadas.length} empresas creadas`);

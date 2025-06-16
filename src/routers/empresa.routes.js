@@ -10,5 +10,6 @@ const routes = Router()
 routes.get('/',empresaController.getEmpresas)
 routes.get('/:cuit',validarCuitEmpresa(Empresa),empresaController.getEmpresaByCuit)
 routes.post('/',schemasValidador(empresaSchema),empresaController.addEmpresa)
+routes.patch('/:cuit/delete',validarCuitEmpresa(Empresa),empresaController.softDeleteEmpresa)
 
 module.exports = routes
