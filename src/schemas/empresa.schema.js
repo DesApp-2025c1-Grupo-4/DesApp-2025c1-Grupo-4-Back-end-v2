@@ -55,20 +55,12 @@ const empresaSchema = Joi.object({
   }),
   datos_contacto: datosContactoSchema.required().messages({
     'any.required': 'Los datos de contacto son requeridos'
-  }),
-  forma_juridica: Joi.string()
-    .valid(...TIPO_EMPRESA)
-    .default('S.R.L')
-    .required()
-    .messages({
-      'any.only': `La forma jurídica debe ser una de: ${TIPO_EMPRESA.join(', ')}`,
-      'any.required': 'La forma jurídica es requerida'
-    })
+  })
 });
 
 // Update schema 
 const empresaUpdateSchema = empresaSchema.fork(
-  ['nombre_empresa', 'cuit_rut', 'domicilio_fiscal', 'datos_contacto', 'forma_juridica'],
+  ['nombre_empresa', 'cuit_rut', 'domicilio_fiscal', 'datos_contacto'],
   (schema) => schema.optional()
 );
 

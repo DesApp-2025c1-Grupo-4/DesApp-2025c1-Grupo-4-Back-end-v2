@@ -33,7 +33,6 @@ async function SeedDatabase() {
                 telefono: '1122334455',
                 mail: 'contacto@transportesarg.com.ar'
             },
-            forma_juridica: 'S.A',
             activo: true
             },
             {
@@ -49,7 +48,6 @@ async function SeedDatabase() {
                 telefono: '1166531402',
                 mail: 'comercial@prots.com.ar'
             },
-            forma_juridica: 'S.R.L',
             activo: true
             }
         ];

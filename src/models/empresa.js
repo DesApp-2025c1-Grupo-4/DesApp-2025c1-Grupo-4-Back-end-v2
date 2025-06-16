@@ -42,13 +42,7 @@ const empresaSchema = new Schema({
   activo: {
     type: Boolean,
     required: true
-  },
-  forma_juridica: {
-    type: String,
-    required: true,
-    enum: ['S.R.L', 'S.A', 'S.A.S', 'S.C', 'Unipersonal', 'Otro'],
-    default: 'S.R.L'
-  },
+  }
 },
 { versionKey: false });
 
