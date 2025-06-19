@@ -71,6 +71,47 @@ depositoController.addDeposito = addDeposito;
 
 //UPDATE - Modificacion 
 
+const updateDeposito = async (req, res) => {
+    try {
+        const id = req.id;
+        const deposito = await Deposito.findById(id);
+
+        if (!deposito) {
+            return res.status(404).json({ mensaje: 'Depósito no encontrado' });
+        }
+
+        const { tipo, activo, localizacion, personal_contacto, horarios } = req.body;
+
+        // Actualizar campos simples si están definidos
+        if (typeof tipo !== 'undefined') deposito.tipo = tipo;
+        if (typeof activo !== 'undefined') deposito.activo = activo;
+
+        // Función auxiliar para actualizar subdocumentos
+        const actualizarSubdocumento = (destino, datos) => {
+            if (typeof datos === 'object' && datos !== null) {
+                Object.entries(datos).forEach(([key, value]) => {
+                    if (typeof value !== 'undefined') destino[key] = value;
+                });
+            }
+        };
+
+        // Subdocumentos
+        actualizarSubdocumento(deposito.localizacion, localizacion);
+        actualizarSubdocumento(deposito.personal_contacto, personal_contacto);
+        actualizarSubdocumento(deposito.horarios, horarios);
+
+        await deposito.save();
+
+        res.status(200).json({ mensaje: 'Depósito actualizado correctamente' });
+
+    } catch (error) {
+        console.error('Error al actualizar el depósito:', error);
+        res.status(500).json({ mensaje: 'Error del servidor al actualizar el depósito' });
+    }
+};
+
+depositoController.updateDeposito = updateDeposito;
+
 //UPDATE - Baja Logica
 
 module.exports = depositoController;

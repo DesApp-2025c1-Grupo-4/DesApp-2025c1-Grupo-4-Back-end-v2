@@ -10,5 +10,6 @@ const routes = Router()
 routes.get('/', DepositoController.getDepositos)
 routes.get('/:_id',validarId(Deposito),DepositoController.getDepositoById)
 routes.post('/',schemasValidador(depositoSchema),DepositoController.addDeposito)
+routes.put('/:_id', validarId(Deposito), DepositoController.updateDeposito)
 
 module.exports = routes
