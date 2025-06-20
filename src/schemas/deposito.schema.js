@@ -93,6 +93,14 @@ const depositoSchema = Joi.object({
       'any.only': 'El tipo debe ser: Propio o tercerizado',
       'any.required': 'El tipo es requerido'
     }),
+
+  activo: Joi.boolean()
+    .required()
+    .messages({
+      'any.required': 'El campo activo es requerido',
+      'boolean.base': 'El campo activo debe ser booleano'
+    }),
+    
   personal_contacto: personalContactoSchema.required().messages({
     'any.required': 'El personal de contacto es requerido'
   }),
@@ -107,5 +115,7 @@ const depositoUpdateSchema = depositoSchema.fork(
   (schema) => schema.optional()
 );
 
-module.exports = depositoSchema
-module.exports = depositoUpdateSchema
+module.exports = {
+  depositoSchema,
+  depositoUpdateSchema
+};
