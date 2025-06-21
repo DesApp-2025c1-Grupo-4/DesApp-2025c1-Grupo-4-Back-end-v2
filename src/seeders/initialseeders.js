@@ -268,7 +268,6 @@ async function SeedDatabase() {
     const SeedViajes = async (empresas, depositos, vehiculos, choferes) => {
         const viajes = [
             {
-            guid_viaje: 1001,
             deposito_origen: depositos[0]._id,
             deposito_destino: depositos[1]._id,
             inicio_viaje: '15/06/2023 08:00',
@@ -279,7 +278,6 @@ async function SeedDatabase() {
             vehiculo_asignado: vehiculos[0]._id
             },
             {
-            guid_viaje: 1002,
             deposito_origen: depositos[1]._id,
             deposito_destino: depositos[0]._id,
             inicio_viaje: '16/06/2023 10:00',

@@ -1,7 +1,5 @@
 const Joi = require('joi')
 
-const TIPO_EMPRESA = ['S.R.L', 'S.A', 'S.A.S', 'S.C', 'Unipersonal', 'Otro'];
-
 // Domicilio schema
 const domicilioFiscalSchema = Joi.object({
   calle: Joi.string().required().messages({
@@ -42,13 +40,14 @@ const empresaSchema = Joi.object({
     .messages({
       'string.empty': 'El nombre de la empresa es requerido',
       'any.required': 'El nombre de la empresa es requerido'
-    }),
-    cuit: Joi.string().min(11).max(11).required().messages({
-      "any.required":"nombre es requerido",
-      "string.min": "El CUIT debe tener como mínimo {#limit} caracteres",
-      "string.max": "El CUIT debe tener como máximo {#limit} caracteres",
-      "string.empty": "El CUIT no puede ser vacio"
-    }),
+  }),
+  cuit: Joi.string().min(11).max(11).required().messages({
+    "any.required":"nombre es requerido",
+    "string.min": "El CUIT debe tener como mínimo {#limit} caracteres",
+    "string.max": "El CUIT debe tener como máximo {#limit} caracteres",
+    "string.empty": "El CUIT no puede ser vacio"
+  }),
+  activo: Joi.bool(),
   domicilio_fiscal: domicilioFiscalSchema.required().messages({
     'any.required': 'El domicilio fiscal es requerido'
   }),

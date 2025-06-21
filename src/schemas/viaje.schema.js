@@ -1,8 +1,8 @@
 const Joi = require('joi')
-const Types = require('mongoose');
+const mongoose = require('mongoose');
 
 const objectId = Joi.string().custom((value, helpers) => {
-  if (!Types.ObjectId.isValid(value)) {
+  if (!mongoose.Types.ObjectId.isValid(value)) {
     return helpers.error('any.invalid');
   }
   return value;
@@ -10,7 +10,7 @@ const objectId = Joi.string().custom((value, helpers) => {
 
 const ESTADO_VIAJE = [
   'planificado',
-  'en_transito',
+  'en transito',
   'completado',
   'demorado',
   'incidente',
@@ -26,12 +26,6 @@ const dateTimeValidation = Joi.string()
 
 // Schema principal
 const viajeSchema = Joi.object({
-  guid_viaje: Joi.number()
-    .required()
-    .messages({
-      'number.base': 'El GUID del viaje debe ser un número',
-      'any.required': 'El GUID del viaje es requerido'
-    }),
   deposito_origen: objectId
     .required()
     .messages({
@@ -51,21 +45,8 @@ const viajeSchema = Joi.object({
     }),
   fin_viaje: dateTimeValidation
     .required()
-    .custom((value, helpers) => {
-      const startDate = helpers.state.ancestors[0].inicio_viaje;
-      if (!startDate) return value;
-      
-      const start = new Date(startDate.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1'));
-      const end = new Date(value.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1'));
-      
-      if (end <= start) {
-        return helpers.error('any.invalid');
-      }
-      return value;
-    })
     .messages({
-      'any.required': 'La fecha/hora de fin es requerida',
-      'any.invalid': 'La fecha/hora de fin debe ser posterior a la de inicio'
+      'any.required': 'La fecha/hora de fin es requerida'
     }),
   estado: Joi.string()
     .valid(...ESTADO_VIAJE)
@@ -98,7 +79,6 @@ const viajeSchema = Joi.object({
 // Update schema 
 const viajeUpdateSchema = viajeSchema.fork(
   [
-    'guid_viaje',
     'deposito_origen',
     'deposito_destino',
     'inicio_viaje',

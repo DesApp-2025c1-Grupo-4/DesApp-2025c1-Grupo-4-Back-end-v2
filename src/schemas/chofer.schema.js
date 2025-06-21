@@ -1,12 +1,12 @@
 const Joi = require('joi')
-const Types = require('mongoose');
+const mongoose = require('mongoose');
 
 // Licencias (no se cual es para cada cosa??)
 const TIPO_LICENCIAS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'C3', 'D1', 'D2', 'E'];
 
 // Custom validation for ObjectId
 const objectId = Joi.string().custom((value, helpers) => {
-  if (!Types.ObjectId.isValid(value)) {
+  if (!mongoose.Types.ObjectId.isValid(value)) {
     return helpers.error('any.invalid');
   }
   return value;
@@ -62,6 +62,7 @@ const choferSchema = Joi.object({
     "string.max": "El CUIL debe tener como máximo {#limit} caracteres",
     "string.empty": "El CUIL no puede ser vacio"
   }),
+  activo: Joi.bool(),
   fecha_nacimiento: Joi.date().max('now').required().messages({
     'date.base': 'Fecha de nacimiento inválida',
     'date.max': 'La fecha de nacimiento no puede ser futura',

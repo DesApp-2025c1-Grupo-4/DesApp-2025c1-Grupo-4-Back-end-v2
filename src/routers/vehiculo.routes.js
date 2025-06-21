@@ -2,14 +2,16 @@ const { Router } = require('express')
 const {VehiculoController} = require('../controllers')
 const { Vehiculo } = require('../models')
 const vehiculoSchema = require('../schemas/vehiculo.schema')
-const { validarPatenteVehiculo } = require('../middleware/idValidador')
+const { validarId, validarPatenteVehiculo } = require('../middleware/idValidador')
 const schemasValidador = require('../middleware/schemasValidador')
 
 const routes = Router()
 
-routes.get('/',VehiculoController.getVehiculos)
-routes.get('/:patente',validarPatenteVehiculo(Vehiculo),VehiculoController.getVehiculoByPatente)
-routes.post('/',schemasValidador(vehiculoSchema),VehiculoController.addVehiculo)
-routes.patch('/:patente/delete',VehiculoController.softDeleteVehiculo)
+routes.get('/', VehiculoController.getVehiculos)
+routes.get('/:_id/', validarId(Vehiculo), VehiculoController.getVehiculoByID)
+routes.get('/:patente/patente', validarPatenteVehiculo(Vehiculo), VehiculoController.getVehiculoByPatente)
+routes.post('/', schemasValidador(vehiculoSchema), VehiculoController.addVehiculo)
+routes.put('/:_id', validarId(Vehiculo), schemasValidador(vehiculoSchema), VehiculoController.updateVehiculo)
+routes.patch('/:_id/delete', validarId(Vehiculo), VehiculoController.softDeleteVehiculo)
 
 module.exports = routes

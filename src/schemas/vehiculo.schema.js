@@ -1,9 +1,9 @@
 const Joi = require('joi')
-const Types = require('mongoose');
+const mongoose = require('mongoose');
 
 // Custom validation for ObjectId
 const objectId = Joi.string().custom((value, helpers) => {
-  if (!Types.ObjectId.isValid(value)) {
+  if (!mongoose.Types.ObjectId.isValid(value)) {
     return helpers.error('any.invalid');
   }
   return value;
@@ -70,6 +70,7 @@ const vehiculoSchema = Joi.object({
       'number.max': `El año no puede ser mayor a ${new Date().getFullYear()}`,
       'any.required': 'El año es requerido'
     }),
+  activo: Joi.bool(),
   capacidad_carga: capacidadCargaSchema
     .required()
     .messages({

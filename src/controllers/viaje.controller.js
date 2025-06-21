@@ -4,7 +4,7 @@ const mongoose = require('../db/server').mongoose;
 
 //GET
 const getViajes = async (req, res) => {
-   const viajes = await Viaje.find()
+    const viajes = await Viaje.find()
         .populate('empresa_asignada', 'nombre_empresa -_id')
         .populate('deposito_origen', 'localizacion -_id')
         .populate('deposito_destino', 'localizacion -_id')
@@ -14,12 +14,20 @@ const getViajes = async (req, res) => {
 };
 viajeController.getViajes = getViajes;
 
+
 //GET BY id
 const getViajeById = async (req, res) => {
-    const id = req.id; // Ya viene del middleware
-    res.status(200).json(id);
+    const id = req.id._id; // Ya viene del middleware
+    const viaje = await Viaje.findById(id)
+        .populate('empresa_asignada', 'nombre_empresa -_id')
+        .populate('deposito_origen', 'localizacion -_id')
+        .populate('deposito_destino', 'localizacion -_id')
+        .populate('chofer_asignado', 'nombre apellido -_id')
+        .populate('vehiculo_asignado', 'patente -_id')
+    res.status(200).json(viaje);
 };
 viajeController.getViajeById = getViajeById;
+
 
 //POST
 const addViaje = async (req, res) => {
@@ -34,9 +42,48 @@ const addViaje = async (req, res) => {
 }
 viajeController.addViaje = addViaje;
 
-//PUT - Modificacion 
 
-//PATCH - Baja Logica
+//PUT - Modificacion 
+const updateViaje = async (req, res) => {
+
+  try {    
+    const viajeActualizado = await Viaje.findByIdAndUpdate(
+      req.params,
+      req.body,
+      { new: true, runValidators: true } 
+    );
+
+    if (!viajeActualizado) {
+      return res.status(404).json({ error: 'Viaje no encontrado' });
+    }
+    res.status(200).json(viajeActualizado);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+viajeController.updateViaje = updateViaje;
+
+
+//PATCH - Estado
+const updateViajeState = async (req, res) => {
+ try {
+    const { id } = req.params;
+    const viaje = await Viaje.findOneAndUpdate(
+      { id },
+      {  $set: { estado: req.body.estado } }
+    );
+
+    if (!viaje) {
+      return res.status(404).json({ message: 'Viaje no encontrado' });
+    }
+
+    res.status(200).json({message: 'Estado de viaje actualizado exitosamente.'});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+viajeController.updateViajeState = updateViajeState;
 
 
 module.exports = viajeController;

@@ -1,18 +1,10 @@
 const Joi = require('joi')
-const Types = require('mongoose');
 
 // Validacion fecha/hora (HH:MM)
 const timeFormat = Joi.string().pattern(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
   .messages({
     'string.pattern.base': 'Formato de hora inválido (HH:MM)'
   });
-
-const objectId = Joi.string().custom((value, helpers) => {
-  if (!Types.ObjectId.isValid(value)) {
-    return helpers.error('any.invalid');
-  }
-  return value;
-}, 'ObjectId Validation');
 
 const DIAS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
 
@@ -85,6 +77,7 @@ const depositoSchema = Joi.object({
   localizacion: localizacionSchema.required().messages({
     'any.required': 'La localización es requerida'
   }),
+  activo: Joi.bool(),
   tipo: Joi.string()
     .valid('Propio', 'Tercerizado')
     .default('Propio')
