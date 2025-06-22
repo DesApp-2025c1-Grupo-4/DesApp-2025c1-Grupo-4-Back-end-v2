@@ -1,4 +1,4 @@
-const { Viaje } = require('../models');
+const { Viaje, Deposito } = require('../models');
 const viajeController = {}
 const mongoose = require('../db/server').mongoose;
 
@@ -45,7 +45,6 @@ viajeController.addViaje = addViaje;
 
 //PUT - Modificacion 
 const updateViaje = async (req, res) => {
-
   try {    
     const viajeActualizado = await Viaje.findByIdAndUpdate(
       req.params,
