@@ -1,7 +1,35 @@
-const { Viaje } = require('../models');
+const { Viaje, Deposito } = require('../models');
 const viajeController = {}
 const mongoose = require('../db/server').mongoose;
 
+//GET
+const getViajes = async (req, res) => {
+    const viajes = await Viaje.find()
+        .populate('empresa_asignada', 'nombre_empresa -_id')
+        .populate('deposito_origen', 'localizacion -_id')
+        .populate('deposito_destino', 'localizacion -_id')
+        .populate('chofer_asignado', 'nombre apellido -_id')
+        .populate('vehiculo_asignado', 'patente -_id')
+   res.status(200).json(viajes)
+};
+viajeController.getViajes = getViajes;
+
+
+//GET BY id
+const getViajeById = async (req, res) => {
+    const id = req.id._id; // Ya viene del middleware
+    const viaje = await Viaje.findById(id)
+        .populate('empresa_asignada', 'nombre_empresa -_id')
+        .populate('deposito_origen', 'localizacion -_id')
+        .populate('deposito_destino', 'localizacion -_id')
+        .populate('chofer_asignado', 'nombre apellido -_id')
+        .populate('vehiculo_asignado', 'patente -_id')
+    res.status(200).json(viaje);
+};
+viajeController.getViajeById = getViajeById;
+
+
+//POST
 const addViaje = async (req, res) => {
     const viajeInf = req.body
     try {
@@ -14,66 +42,47 @@ const addViaje = async (req, res) => {
 }
 viajeController.addViaje = addViaje;
 
-const getViajes = async (req, res) => {
-    try {
-        const { detalles } = req.query; // Capturamos el parámetro query
-        let viajesQuery = Viaje.find().select('-asignacion -depositoOrigen -depositoDestino');
-        if (detalles === "true") {
-            viajesQuery = viajesQuery.populate([
-                {
-                    path: "depositoOrigen",
-                    model: "Deposito",
-                    select: "localizacion",
-                    populate: {
-                        path: "localizacion",
-                        select: "provinciaOestado país -_id"
-                    }
-                },
-                {
-                    path: "depositoDestino",
-                    model: "Deposito",
-                    select: "localizacion",
-                    populate: {
-                        path: "localizacion",
-                        select: "provinciaOestado país -_id"
-                    }
-                },
-                {
-                    path: "asignacion",
-                    model: "Asignacion",
-                    select: "-viaje",
-                    populate: [
-                        {
-                            path: "chofer",
-                            select: "nombre apellido empresa",
-                            populate: {
-                                path: "empresa",
-                                select: "razonSocial"
-                            }
-                        },
-                        {
-                            path: "vehiculo",
-                            select: "patente -_id"
-                        }
-                    ]
-                }
-            ]);
-        }
 
-        const viajes = await viajesQuery;
+//PUT - Modificacion 
+const updateViaje = async (req, res) => {
+  try {    
+    const viajeActualizado = await Viaje.findByIdAndUpdate(
+      req.params,
+      req.body,
+      { new: true, runValidators: true } 
+    );
 
-        res.status(200).json(viajes);
-    } catch (error) {
-        res.status(500).json({ message: "Error al obtener los viajes", details: error.message });
+    if (!viajeActualizado) {
+      return res.status(404).json({ error: 'Viaje no encontrado' });
     }
-};
+    res.status(200).json(viajeActualizado);
 
-viajeController.getViajes = getViajes;
-
-const getViajeById = async (req, res) => {
-    const id = req.id; // Ya viene del middleware
-    res.status(200).json(id);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-viajeController.getViajeById = getViajeById;
+viajeController.updateViaje = updateViaje;
+
+
+//PATCH - Estado
+const updateViajeState = async (req, res) => {
+ try {
+    const { id } = req.params;
+    const viaje = await Viaje.findOneAndUpdate(
+      { id },
+      {  $set: { estado: req.body.estado } }
+    );
+
+    if (!viaje) {
+      return res.status(404).json({ message: 'Viaje no encontrado' });
+    }
+
+    res.status(200).json({message: 'Estado de viaje actualizado exitosamente.'});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+viajeController.updateViajeState = updateViajeState;
+
 
 module.exports = viajeController;

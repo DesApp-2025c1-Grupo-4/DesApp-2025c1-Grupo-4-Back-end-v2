@@ -1,40 +1,48 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
 
-const empresaSchema = new mongoose.Schema({
-    cuit: {
-        type: Schema.Types.BigInt,
-        required: true
-    },
-    razonSocial: {
-        type: Schema.Types.String,
-        required: true
-    },
-    domicilio: {
-        type: Schema.Types.String,
-        required: true
-    },
-    contacto: {
-        type: Schema.Types.BigInt,
-        required: true
-    },
-    choferes: [{type: Schema.Types.ObjectId, ref: 'Chofer'}]
+const domicilioFiscalSchema = new Schema({
+  calle: { type: String, required: true },
+  ciudad: { type: String, required: true },
+  provincia: { type: String, required: true },
+  pais: { type: String, required: true, default: 'Argentina' }
+},
+{ versionKey: false });
 
-},{
-  collection: 'Empresa', // Especifica el nombre en singular
-});
+const datosContactoSchema = new Schema({
+  telefono: { type: String, required: true },
+  mail: { 
+    type: String, 
+    required: true,
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Email no válido']
+  }
+},
+{ versionKey: false });
 
-empresaSchema.set('toJSON', {
-    transform: (_, ret) => {
-        delete ret.__v;
-        if(ret.cuit !== undefined){
-            ret.cuit = ret.cuit.toString();
-        }        
-
-        if (ret.contacto !== undefined) {
-            ret.contacto = ret.contacto.toString();
-        }
-    }
-})
+const empresaSchema = new Schema({
+  nombre_empresa: { 
+    type: String, 
+    required: true,
+    trim: true
+  },
+  cuit: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  domicilio_fiscal: {
+    type: domicilioFiscalSchema,
+    required: true
+  },
+  datos_contacto: {
+    type: datosContactoSchema,
+    required: true
+  },
+  activo: {
+    type: Boolean,
+    required: true
+  }
+},
+{ versionKey: false });
 
 module.exports = mongoose.model('Empresa', empresaSchema);

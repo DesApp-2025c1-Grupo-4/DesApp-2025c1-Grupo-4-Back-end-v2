@@ -2,29 +2,87 @@ const {Chofer} = require('../models');
 const choferController = {}
 const mongoose = require('../db/server').mongoose;
 
+
+//GET
+const getChoferes = async (req,res) => {
+  const choferes = await Chofer.find()
+  .populate('empresa', 'nombre_empresa -_id')
+  .populate('vehiculo_defecto', 'patente -_id');
+  res.status(200).json(choferes)
+}
+choferController.getChoferes = getChoferes;
+
+
+//GET BY id
+const getChoferById = async (req,res) => {
+  const id = req.id._id; // Ya viene del middleware
+  const chofer = await Chofer.findById(id)
+  .populate('empresa', 'nombre_empresa -_id')
+  .populate('vehiculo_defecto', 'patente -_id');
+  res.status(200).json(chofer);
+};
+choferController.getChoferById = getChoferById;
+
+
+//GET BY cuil
+const getChoferByCuil = async (req,res) => {
+  const chofer = req.chofer; // Ya viene del middleware
+  res.status(200).json(chofer);
+};
+choferController.getChoferByCuil = getChoferByCuil;
+
+
+//POST
 const addChofer = async (req,res) => {
-    const choferInf = req.body
+  const choferInf = req.body
     try{
-        const chofer = new Chofer(choferInf)
-        await chofer.save()
-        res.status(201).json({mensaje : 'El chofer fue agregado correctamente'})
+      const chofer = new Chofer(choferInf)
+      await chofer.save()
+      res.status(201).json({mensaje : 'El chofer fue agregado correctamente'})
     } catch {
-        res.status(400).json({mensaje : 'El servidor no puede procesar la solicitud'})
+      res.status(400).json({mensaje : 'El servidor no puede procesar la solicitud'})
     }
 }
 choferController.addChofer = addChofer;
 
-const getChoferes = async (req,res) => {
-    const chofer = await Chofer.find().select('-asignaciones')
-    res.status(200).json(chofer)
-}
-choferController.getChoferes = getChoferes;
 
-const getChoferByCuil = async (req,res) => {
-    const chofer = req.chofer; // Ya viene del middleware
-    res.status(200).json(chofer);
+//PUT - Modificacion 
+const updateChofer = async (req, res) => {
+  try {    
+    const choferActualizado = await Chofer.findByIdAndUpdate(
+      req.params,
+      req.body,
+      { new: true, runValidators: true } 
+    );
+
+    if (!choferActualizado) {
+      return res.status(404).json({ error: 'Chofer no encontrado' });
+    }
+    res.status(200).json(choferActualizado);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-choferController.getChoferByCuil = getChoferByCuil;
+choferController.updateChofer = updateChofer;
+
+
+//PATCH - Baja Logica
+const softDeleteChofer = async (req, res) => {
+ try {
+    const { id } = req.params; // Ya viene del middleware;
+    
+    const chofer = await Chofer.findOneAndUpdate(
+      { id },
+      { $set: { activo: false } }
+    );
+    res.status(200).json({message: 'Chofer borrado exitosamente.'});
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+choferController.softDeleteChofer = softDeleteChofer;
 
 
 module.exports = choferController;
