@@ -91,5 +91,7 @@ const viajeUpdateSchema = viajeSchema.fork(
   (schema) => schema.optional()
 );
 
-module.exports = viajeSchema
-module.exports = viajeUpdateSchema
+module.exports = {
+  viajeSchema,
+  viajeUpdateSchema
+};

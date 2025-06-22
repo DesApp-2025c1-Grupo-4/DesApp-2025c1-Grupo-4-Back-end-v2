@@ -84,5 +84,7 @@ const choferUpdateSchema = choferSchema.fork(
   (schema) => schema.optional()
 );
 
-module.exports = choferSchema
-module.exports = choferUpdateSchema
+module.exports = {
+  choferSchema,
+  choferUpdateSchema
+};

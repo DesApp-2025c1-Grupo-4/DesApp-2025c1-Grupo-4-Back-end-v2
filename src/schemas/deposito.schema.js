@@ -100,5 +100,7 @@ const depositoUpdateSchema = depositoSchema.fork(
   (schema) => schema.optional()
 );
 
-module.exports = depositoSchema
-module.exports = depositoUpdateSchema
+module.exports = {
+  depositoSchema,
+  depositoUpdateSchema
+};

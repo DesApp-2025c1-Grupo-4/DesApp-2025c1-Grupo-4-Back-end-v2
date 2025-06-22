@@ -1,6 +1,21 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
 
+
+const PointSchema = new Schema({
+  type: {
+    type: String,
+    enum: ['Point'],
+    required: true,
+    default: 'Point'
+  },
+  coordinates: {
+    type: [Number],
+    required: true
+  }
+},
+{ _id: false, versionKey: false });
+
 const LocalizacionSchema = new Schema({
   direccion: { 
     type: String, 
@@ -19,7 +34,7 @@ const LocalizacionSchema = new Schema({
     type: String, 
     required: true,
     default: 'Argentina' 
-  }
+  },
 },
 { versionKey: false });
 
@@ -95,6 +110,11 @@ const depositoSchema = new Schema({
   horarios: {
     type: HorariosSchema,
     required: true
+  },
+  coordenadas: {
+    type: PointSchema, 
+    required: true,
+    index: '2dsphere'
   }
 },
 { versionKey: false });

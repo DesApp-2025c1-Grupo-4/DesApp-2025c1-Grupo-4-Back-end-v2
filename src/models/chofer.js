@@ -10,7 +10,6 @@ const LicenciaSchema = new Schema({
   tipos: {
     type: [String],
     required: true,
-    enum: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'C3', 'D1', 'D2', 'E'], // no se cual es para manejar logistica y camiones?
     validate: {
       validator: function(v) {
         return v.length > 0; // al menos un tipo de licencia tiene que cargar

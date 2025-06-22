@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
 
 const domicilioFiscalSchema = new Schema({
-  calle: { type: String, required: true },
+  direccion: { type: String, required: true },
   ciudad: { type: String, required: true },
-  provincia: { type: String, required: true },
+  provincia_estado: { type: String, required: true },
   pais: { type: String, required: true, default: 'Argentina' }
 },
 { versionKey: false });

@@ -24,9 +24,9 @@ async function SeedDatabase() {
             nombre_empresa: 'Transportes Argentinos S.A.',
             cuit: '30123456789',
             domicilio_fiscal: {
-                calle: 'Av. Corrientes 1234',
+                direccion: 'Av. Corrientes 1234',
                 ciudad: 'Buenos Aires',
-                provincia: 'CABA',
+                provincia_estado: 'CABA',
                 pais: 'Argentina'
             },
             datos_contacto: {
@@ -39,9 +39,9 @@ async function SeedDatabase() {
             nombre_empresa: 'Prots S.R.L.',
             cuit: '30711671842',
             domicilio_fiscal: {
-                calle: 'Pedro Reta 36',
+                direccion: 'Pedro Reta 36',
                 ciudad: 'Monte Grande',
-                provincia: 'Provincia de Buenos Aires',
+                provincia_estado: 'Provincia de Buenos Aires',
                 pais: 'Argentina'
             },
             datos_contacto: {
@@ -126,6 +126,10 @@ async function SeedDatabase() {
                     desde: '08:00',
                     hasta: '18:00'
                 },
+                coordenadas: {
+                    type: "Point",  
+                    coordinates: [-73.9667, 40.7829] 
+                }
             },
             {
                 localizacion: {
@@ -146,6 +150,10 @@ async function SeedDatabase() {
                     desde: '07:00',
                     hasta: '20:00'
                 },
+                coordenadas: {
+                    type: "Point",  
+                    coordinates: [-73.9667, 40.7829] 
+                }
             },
             {
                 localizacion: {
@@ -166,6 +174,10 @@ async function SeedDatabase() {
                     desde: '07:00',
                     hasta: '20:00'
                 },
+                coordenadas: {
+                    type: "Point", 
+                    coordinates: [-73.9667, 40.7829] 
+                }
             },
             {
                 localizacion: {
@@ -186,6 +198,10 @@ async function SeedDatabase() {
                     desde: '08:00',
                     hasta: '23:00'
                 },
+                coordenadas: {
+                    type: "Point", 
+                    coordinates: [-73.9667, 40.7829] 
+                }
             },
         ];
 

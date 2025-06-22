@@ -91,5 +91,7 @@ const vehiculoUpdateSchema = vehiculoSchema.fork(
   (schema) => schema.optional()
 );
 
-module.exports = vehiculoSchema
-module.exports = vehiculoUpdateSchema
+module.exports = {
+  vehiculoSchema,
+  vehiculoUpdateSchema
+};

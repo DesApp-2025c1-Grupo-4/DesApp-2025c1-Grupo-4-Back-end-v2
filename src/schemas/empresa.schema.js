@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 // Domicilio schema
 const domicilioFiscalSchema = Joi.object({
-  calle: Joi.string().required().messages({
+  direccion: Joi.string().required().messages({
     'string.empty': 'La calle es requerida',
     'any.required': 'La calle es requerida'
   }),
@@ -10,7 +10,7 @@ const domicilioFiscalSchema = Joi.object({
     'string.empty': 'La ciudad es requerida',
     'any.required': 'La ciudad es requerida'
   }),
-  provincia: Joi.string().required().messages({
+  provincia_estado: Joi.string().required().messages({
     'string.empty': 'La provincia es requerida',
     'any.required': 'La provincia es requerida'
   }),
@@ -62,5 +62,7 @@ const empresaUpdateSchema = empresaSchema.fork(
   (schema) => schema.optional()
 );
 
-module.exports = empresaSchema
-module.exports = empresaUpdateSchema
+module.exports = {
+  empresaSchema,
+  empresaUpdateSchema
+};
