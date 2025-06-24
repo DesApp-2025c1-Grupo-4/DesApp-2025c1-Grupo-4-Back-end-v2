@@ -276,16 +276,6 @@ async function SeedDatabase() {
             empresa_asignada: empresas[0]._id,
             chofer_asignado: choferes[0]._id,
             vehiculo_asignado: vehiculos[0]._id
-            },
-            {
-            deposito_origen: depositos[1]._id,
-            deposito_destino: depositos[0]._id,
-            inicio_viaje: '16/06/2023 10:00',
-            fin_viaje: '17/06/2023 02:00',
-            estado: 'planificado',
-            empresa_asignada: empresas[1]._id,
-            chofer_asignado: choferes[1]._id,
-            vehiculo_asignado: vehiculos[1]._id
             }
         ];
 

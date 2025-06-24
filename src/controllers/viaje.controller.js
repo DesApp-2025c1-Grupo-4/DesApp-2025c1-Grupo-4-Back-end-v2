@@ -31,34 +31,57 @@ viajeController.getViajeById = getViajeById;
 
 //POST
 const addViaje = async (req, res) => {
-    const viajeInf = req.body
-    try {
-        const viaje = new Viaje(viajeInf)
-        await viaje.save()
-        res.status(201).json({ mensaje: 'El viaje fue agregado correctamente' })
-    } catch {
-        res.status(400).json({ mensaje: 'El servidor no puede procesar la solicitud' })
+  try {
+    // Validación manual para campos requeridos
+    if (!req.body.empresa_asignada) {
+      return res.status(400).json({
+        mensaje: 'Falta la empresa transportista',
+        campo_faltante: 'empresa_asignada'
+      });
     }
-}
+
+    const viaje = new Viaje(req.body);
+    await viaje.save();
+    res.status(201).json({ mensaje: 'Viaje creado exitosamente' });
+  } catch (error) {
+    // Manejo detallado de errores
+    if (error.name === 'ValidationError') {
+      const errores = {};
+      Object.keys(error.errors).forEach(key => {
+        errores[key] = error.errors[key].message;
+      });
+      return res.status(400).json({
+        mensaje: 'Error de validación',
+        errores_detallados: errores
+      });
+    }
+    res.status(500).json({ mensaje: 'Error del servidor', error: error.message });
+  }
+};
 viajeController.addViaje = addViaje;
 
 
 //PUT - Modificacion 
 const updateViaje = async (req, res) => {
-  try {    
+  try {
     const viajeActualizado = await Viaje.findByIdAndUpdate(
-      req.params,
+      req.params._id, // Asegúrate que esto coincida con tu ruta
       req.body,
-      { new: true, runValidators: true } 
+      { new: true, runValidators: true }
     );
 
     if (!viajeActualizado) {
-      return res.status(404).json({ error: 'Viaje no encontrado' });
+      return res.status(404).json({ 
+        error: 'Viaje no encontrado',
+        idRecibido: req.params._id
+      });
     }
     res.status(200).json(viajeActualizado);
-
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ 
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 viajeController.updateViaje = updateViaje;
