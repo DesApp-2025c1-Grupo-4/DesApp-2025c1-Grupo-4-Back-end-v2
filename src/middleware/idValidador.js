@@ -51,7 +51,7 @@ const validarCuilChofer = (Modelo) => {
     };
 };
 
-module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer};
+//module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer};
 
 const validarCuitEmpresa = (Modelo) => {
     return async (req, res, next) => {
@@ -70,4 +70,30 @@ const validarCuitEmpresa = (Modelo) => {
     };
 };
 
-module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer, validarCuitEmpresa};
+
+const validarCampoDuplicado = (Modelo, campo, nombreEntidad, articulo) => {
+  return async (req, res, next) => {
+    try {
+      const valor = req.body[campo];
+      if (!valor) return next(); // si no está el campo, pasa la validación
+
+      const id = req.params._id;
+
+      const filtro = { [campo]: valor };
+      if (id) filtro._id = { $ne: id };
+
+      const existe = await Modelo.findOne(filtro);
+
+      if (existe) {
+        return res.status(409).json({ mensaje: `Ya existe ${articulo} ${nombreEntidad} con ese ${campo.toUpperCase()}` });
+      }
+
+      next();
+    } catch (error) {
+      console.error(`Error en validación de ${campo} duplicado:`, error);
+      res.status(500).json({ mensaje: `Error interno en validación de ${campo}` });
+    }
+  };
+};
+
+module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer, validarCuitEmpresa, validarCampoDuplicado};
