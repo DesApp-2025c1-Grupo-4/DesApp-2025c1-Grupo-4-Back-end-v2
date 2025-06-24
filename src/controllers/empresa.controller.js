@@ -3,17 +3,35 @@ const empresaController = {}
 const mongoose = require('../db/server').mongoose;
 
 //GET
+// Query params --> empresas?active=true
 const getEmpresas = async (req, res) => {
-  const empresa = await Empresa.find();
-  res.status(200).json(empresa);
+  const { active } = req.query;
+  
+    let empresas = await Empresa.find();
+  
+    if (active){
+      empresas = (await Empresa.find()).filter(item => item.activo === true)
+    }
+  
+     if (!empresas){
+      return res.status(404).json({ error: 'No se encontraron empresas activas' });
+    }
+    
+    res.status(200).json(empresas)
 }
 empresaController.getEmpresas = getEmpresas;
 
+
 //GET BY id
 const getEmpresaById = async (req,res) => {
-  const id = req.id; // Ya viene del middleware
-  const empresa = await Empresa.findById(id);
-  res.status(200).json(empresa);
+ const { active } = req.query;
+   const id = req.id;
+   let empresa = await Empresa.findById(id)
+   
+   if (active && !empresa || empresa.activo != true){
+     return res.status(404).json({ error: 'Empresa no encontrada' });
+   }
+   res.status(200).json(empresa);
 };
 empresaController.getEmpresaById = getEmpresaById;
 

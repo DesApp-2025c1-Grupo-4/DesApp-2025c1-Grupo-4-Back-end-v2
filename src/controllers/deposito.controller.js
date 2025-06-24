@@ -3,20 +3,36 @@ const depositoController = {}
 const mongoose = require('../db/server').mongoose;
 
 //GET
+// Query params --> depositos?active=true
 const getDepositos = async (req,res) => {
-  const deposito = await Deposito.find()
-  res.status(200).json(deposito)
+
+  const { active } = req.query;
+
+  let depositos = await Deposito.find();
+
+  if (active){
+    depositos = (await Deposito.find()).filter(item => item.activo === true)
+  }
+
+   if (!depositos){
+    return res.status(404).json({ error: 'No se encontraron depositos activos' });
+  }
+  
+  res.status(200).json(depositos)
 }
 depositoController.getDepositos = getDepositos;
 
 
 //GET BY id
 const getDepositoById = async (req,res) => {
-  const id = req.id; // Ya viene del middleware
-  const deposito = await Deposito.findById(id);
-    if (!deposito) {
-      return res.status(404).json({ mensaje: 'Depósito no encontrado' });
-    }
+  
+  const { active } = req.query;
+  const id = req.id;
+  let deposito = await Deposito.findById(id)
+  
+  if (active && !deposito || deposito.activo != true){
+    return res.status(404).json({ error: 'Deposito no encontrado' });
+  }
   res.status(200).json(deposito);
 };
 depositoController.getDepositoById = getDepositoById;
@@ -33,7 +49,6 @@ const addDeposito = async (req,res) => {
       deposito: depositoGuardado
     });
   } catch (error) {
-    console.error('Error al crear el depósito:', error);
     res.status(500).json({
       mensaje: 'Error al crear el depósito',
       error: error.message

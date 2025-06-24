@@ -3,17 +3,37 @@ const vehiculoController = {}
 const mongoose = require('../db/server').mongoose;
 
 //GET
+// Query params --> vehiculos?active=true
 const getVehiculos = async (req,res) => {
-  const vehiculo = await Vehiculo.find().populate('empresa', 'nombre_empresa -_id');
-  res.status(200).json(vehiculo)
+  const { active } = req.query;
+  
+    let vehiculos = await Vehiculo.find()
+    .populate('empresa', 'nombre_empresa');
+  
+    if (active){
+      vehiculos = (await Vehiculo.find()).filter(item => item.activo === true)
+    }
+  
+     if (!vehiculos){
+      return res.status(404).json({ error: 'No se encontraron vehiculos activos' });
+    }
+    
+    res.status(200).json(vehiculos)
 }
 vehiculoController.getVehiculos = getVehiculos;
 
 
 //GET BY id
 const getVehiculoByID= async (req,res) => {
-  const vehiculo = await Vehiculo.findById(req.params._id).populate('empresa', 'nombre_empresa -_id');
-  res.status(200).json(vehiculo);
+  const { active } = req.query;
+    const id = req.id;
+    let vehiculo = await Vehiculo.findById(id)
+      .populate('empresa', 'nombre_empresa');
+  
+    if (active && !vehiculo || vehiculo.activo != true){
+      return res.status(404).json({ error: 'Vehiculo no encontrado' });
+    }
+    res.status(200).json(vehiculo);
 };
 vehiculoController.getVehiculoByID = getVehiculoByID; 
 

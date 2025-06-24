@@ -5,11 +5,11 @@ const mongoose = require('../db/server').mongoose;
 //GET
 const getViajes = async (req, res) => {
     const viajes = await Viaje.find()
-        .populate('empresa_asignada', 'nombre_empresa -_id')
-        .populate('deposito_origen', 'localizacion -_id')
-        .populate('deposito_destino', 'localizacion -_id')
-        .populate('chofer_asignado', 'nombre apellido -_id')
-        .populate('vehiculo_asignado', 'patente -_id')
+        .populate('empresa_asignada', 'nombre_empresa')
+        .populate('deposito_origen', 'localizacion')
+        .populate('deposito_destino', 'localizacion')
+        .populate('chofer_asignado', 'nombre apellido')
+        .populate('vehiculo_asignado', 'patente')
    res.status(200).json(viajes)
 };
 viajeController.getViajes = getViajes;
@@ -19,11 +19,11 @@ viajeController.getViajes = getViajes;
 const getViajeById = async (req, res) => {
     const id = req.id._id; // Ya viene del middleware
     const viaje = await Viaje.findById(id)
-        .populate('empresa_asignada', 'nombre_empresa -_id')
-        .populate('deposito_origen', 'localizacion -_id')
-        .populate('deposito_destino', 'localizacion -_id')
-        .populate('chofer_asignado', 'nombre apellido -_id')
-        .populate('vehiculo_asignado', 'patente -_id')
+        .populate('empresa_asignada', 'nombre_empresa')
+        .populate('deposito_origen', 'localizacion')
+        .populate('deposito_destino', 'localizacion')
+        .populate('chofer_asignado', 'nombre apellido')
+        .populate('vehiculo_asignado', 'patente')
     res.status(200).json(viaje);
 };
 viajeController.getViajeById = getViajeById;

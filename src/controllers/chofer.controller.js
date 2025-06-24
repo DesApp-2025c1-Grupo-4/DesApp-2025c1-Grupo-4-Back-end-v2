@@ -4,10 +4,20 @@ const mongoose = require('../db/server').mongoose;
 
 
 //GET
+// Query params --> choferes?active=true
 const getChoferes = async (req,res) => {
-  const choferes = await Chofer.find()
-  .populate('empresa', 'nombre_empresa -_id')
-  .populate('vehiculo_defecto', 'patente -_id');
+
+  const { active } = req.query;
+  let choferes = await Chofer.find()
+    .populate('empresa', 'nombre_empresa')
+    .populate('vehiculo_defecto', 'patente')
+
+  if (active){
+    choferes = choferes.filter(item => item.activo === true)
+  }
+  if (!choferes){
+    return res.status(404).json({ error: 'No se encontraron choferes activos' });
+  }
   res.status(200).json(choferes)
 }
 choferController.getChoferes = getChoferes;
@@ -15,10 +25,16 @@ choferController.getChoferes = getChoferes;
 
 //GET BY id
 const getChoferById = async (req,res) => {
-  const id = req.id._id; // Ya viene del middleware
-  const chofer = await Chofer.findById(id)
-  .populate('empresa', 'nombre_empresa -_id')
-  .populate('vehiculo_defecto', 'patente -_id');
+  
+  const { active } = req.query;
+  const id = req.id;
+  let chofer = await Chofer.findById(id)
+    .populate('empresa', 'nombre_empresa')
+    .populate('vehiculo_defecto', 'patente')
+
+  if (active && !chofer || chofer.activo != true){
+    return res.status(404).json({ error: 'Chofer no encontrado' });
+  }
   res.status(200).json(chofer);
 };
 choferController.getChoferById = getChoferById;
