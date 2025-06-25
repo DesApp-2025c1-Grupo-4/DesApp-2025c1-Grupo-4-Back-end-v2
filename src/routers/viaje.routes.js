@@ -9,7 +9,7 @@ const routes = Router()
 
 routes.get('/', viajeController.getViajes)
 routes.post('/', schemasValidador(viajeSchema), viajeController.addViaje)
-routes.get('/:_id', viajeController.getViajeById)
+routes.get('/:_id', validarId(Viaje), viajeController.getViajeById)
 routes.put('/:_id', validarId(Viaje), schemasValidador(viajeSchema), viajeController.updateViaje)
 routes.patch('/:_id/estado', schemasValidador(viajeSchema), viajeController.updateViajeState)
 
