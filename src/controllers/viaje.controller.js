@@ -17,14 +17,14 @@ viajeController.getViajes = getViajes;
 
 //GET BY id
 const getViajeById = async (req, res) => {
-    const id = req.id._id; // Ya viene del middleware
-    const viaje = await Viaje.findById(id)
-        .populate('empresa_asignada', 'nombre_empresa')
-        .populate('deposito_origen', 'localizacion')
-        .populate('deposito_destino', 'localizacion')
-        .populate('chofer_asignado', 'nombre apellido')
-        .populate('vehiculo_asignado', 'patente')
-    res.status(200).json(viaje);
+  const id = req.id._id; // Ya viene del middleware
+  const viaje = await Viaje.findById(id)
+    .populate('empresa_asignada', 'nombre_empresa')
+    .populate('deposito_origen', 'localizacion')
+    .populate('deposito_destino', 'localizacion')
+    .populate('chofer_asignado', 'nombre apellido')
+    .populate('vehiculo_asignado', 'patente')
+  res.status(200).json(viaje);
 };
 viajeController.getViajeById = getViajeById;
 
