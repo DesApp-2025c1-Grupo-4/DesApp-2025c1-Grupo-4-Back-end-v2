@@ -47,8 +47,29 @@ const getChoferByCuil = async (req,res) => {
 };
 choferController.getChoferByCuil = getChoferByCuil;
 
+const addChofer = async (req, res) => {
+  const choferInf = req.body;
 
-//POST
+  // Convertir buffer serializado a Buffer real
+  try {
+    const data = choferInf?.licencia?.documento?.data;
+    if (data && data.type === 'Buffer' && Array.isArray(data.data)) {
+      choferInf.licencia.documento.data = Buffer.from(data.data);
+    }
+
+    const chofer = new Chofer(choferInf);
+    await chofer.save();
+
+    res.status(201).json({ mensaje: 'El chofer fue agregado correctamente' });
+  } catch (error) {
+    res.status(400).json({
+      mensaje: 'El servidor no puede procesar la solicitud',
+      error: error.message
+    });
+  }
+};
+choferController.addChofer = addChofer;
+/*POST
 const addChofer = async (req,res) => {
   const choferInf = req.body
     try{
@@ -60,7 +81,7 @@ const addChofer = async (req,res) => {
     }
 }
 choferController.addChofer = addChofer;
-
+*/
 
 //PUT - Modificacion 
 const updateChofer = async (req, res) => {

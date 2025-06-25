@@ -35,13 +35,29 @@ const licenciaSchema = Joi.object({
       'any.required': 'La fecha de expiración es requerida'
     }),
   documento: Joi.object({
-    data: Joi.binary().required(),
+  data: Joi.object({
+    type: Joi.string().valid('Buffer').required(),
+    data: Joi.array().items(Joi.number()).required()
+  }).required(),
+  contentType: Joi.string()
+    .valid('image/jpeg', 'image/png', 'image/gif', 'application/pdf')
+    .required(),
+  fileName: Joi.string().required(),
+  size: Joi.number().max(5 * 1024 * 1024).required()
+}).required(),
+/* documento: Joi.object({
+    //data: Joi.binary().required(),
+    // el joi.binary() debe parsear el buffers antes de procesarlo.
+    data: Joi.object({
+      type: Joi.string().valid('Buffer'),
+      data: Joi.array().items(Joi.number()).required()
+    }).required(),
     contentType: Joi.string()
       .valid('image/jpeg', 'image/png', 'image/gif', 'application/pdf')
       .required(),
     fileName: Joi.string().required(),
     size: Joi.number().max(5 * 1024 * 1024) // 5MB limit
-  }).required()
+  }).required()*/
 });
 
 // Main Joi schema for the driver
