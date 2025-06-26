@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const {DepositoController} = require('../controllers/')
 const { Deposito } = require('../models')
-const depositoSchema = require('../schemas/deposito.schema')
+const {depositoSchema} = require('../schemas/deposito.schema')
 const { validarId } = require('../middleware/idValidador')
 const schemasValidador = require('../middleware/schemasValidador')
 

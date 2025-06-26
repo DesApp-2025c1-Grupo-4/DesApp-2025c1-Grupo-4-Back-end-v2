@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const {VehiculoController} = require('../controllers')
 const { Vehiculo } = require('../models')
-const vehiculoSchema = require('../schemas/vehiculo.schema')
+const {vehiculoSchema} = require('../schemas/vehiculo.schema')
 const { validarId, validarPatenteVehiculo } = require('../middleware/idValidador')
 const schemasValidador = require('../middleware/schemasValidador')
 

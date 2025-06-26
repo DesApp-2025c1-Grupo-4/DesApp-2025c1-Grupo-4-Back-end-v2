@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const empresaController = require('../controllers/empresa.controller')
 const { Empresa } = require('../models')
-const empresaSchema = require('../schemas/empresa.schema')
+const {empresaSchema} = require('../schemas/empresa.schema')
 const { validarId, validarCuitEmpresa, validarCampoDuplicado } = require('../middleware/idValidador')
 const schemasValidador = require('../middleware/schemasValidador')
 
