@@ -72,6 +72,22 @@ const horariosSchema = Joi.object({
     })
 });
 
+// Coordenadas schema
+const coordenadasSchema = Joi.object({
+  type: Joi.string().valid('Point').required().messages({
+    'any.only': 'El tipo de coordenadas debe ser "Point"',
+    'any.required': 'El tipo de coordenadas es requerido'
+  }),
+  coordinates: Joi.array()
+    .items(Joi.number())
+    .length(2)
+    .required()
+    .messages({
+      'array.length': 'Las coordenadas deben contener exactamente dos valores: longitud y latitud',
+      'any.required': 'Las coordenadas son requeridas'
+    })
+});
+
 // Schema principal
 const depositoSchema = Joi.object({
   localizacion: localizacionSchema.required().messages({
@@ -91,12 +107,15 @@ const depositoSchema = Joi.object({
   }),
   horarios: horariosSchema.required().messages({
     'any.required': 'Los horarios son requeridos'
+  }),
+  coordenadas: coordenadasSchema.required().messages({
+    'any.required': 'Las coordenadas son requeridas'
   })
 });
 
 // Update schema 
 const depositoUpdateSchema = depositoSchema.fork(
-  ['localizacion', 'tipo', 'personal_contacto', 'horarios'],
+  ['localizacion', 'tipo', 'personal_contacto', 'horarios','coordenadas'],
   (schema) => schema.optional()
 );
 
