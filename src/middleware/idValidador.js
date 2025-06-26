@@ -96,4 +96,31 @@ const validarCampoDuplicado = (Modelo, campo, nombreEntidad, articulo) => {
   };
 };
 
-module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer, validarCuitEmpresa, validarCampoDuplicado};
+
+const validarVehiculoDeEmpresa = (VehiculoModelo) => {
+  return async (req, res, next) => {
+    try {
+      const { empresa, vehiculo_defecto } = req.body;
+
+      if (!empresa || !vehiculo_defecto) return next(); // Si falta alguno, saltea validación
+
+      const vehiculo = await VehiculoModelo.findById(vehiculo_defecto);
+
+      if (!vehiculo) {
+        return res.status(404).json({ mensaje: 'Vehículo no encontrado' });
+      }
+
+      if (vehiculo.empresa.toString() !== empresa.toString()) {
+        return res.status(400).json({ mensaje: 'El vehículo no pertenece a la empresa asignada al chofer' });
+      }
+
+      next();
+    } catch (error) {
+      console.error('Error en validarVehiculoDeEmpresa:', error);
+      res.status(500).json({ mensaje: 'Error interno al validar empresa del vehículo' });
+    }
+  };
+};
+
+
+module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer, validarCuitEmpresa, validarCampoDuplicado, validarVehiculoDeEmpresa};
