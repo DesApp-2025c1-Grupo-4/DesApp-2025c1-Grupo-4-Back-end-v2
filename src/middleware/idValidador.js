@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { DateTime } = require('luxon');
 
 const validarId = (Modelo) => {
     return async (req, res, next) => {
@@ -122,5 +123,69 @@ const validarVehiculoDeEmpresa = (VehiculoModelo) => {
   };
 };
 
+const validarDisponibilidad = (ViajeModelo) => {
+  return async (req, res, next) => {
+    try {
+      const { chofer_asignado, vehiculo_asignado, inicio_viaje, fin_viaje } = req.body;
 
-module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer, validarCuitEmpresa, validarCampoDuplicado, validarVehiculoDeEmpresa};
+      const nuevoInicio = DateTime.fromFormat(inicio_viaje, 'dd/MM/yyyy HH:mm');
+      const nuevoFin = DateTime.fromFormat(fin_viaje, 'dd/MM/yyyy HH:mm');
+
+      if (!nuevoInicio.isValid || !nuevoFin.isValid) {
+        return res.status(400).json({ mensaje: 'Fechas inválidas. Deben tener formato DD/MM/YYYY HH:mm' });
+      }
+
+      // Buscar viajes activos que usen ese chofer o vehículo
+      const viajesRelacionados = await ViajeModelo.find({
+        $or: [
+          { chofer_asignado },
+          { vehiculo_asignado }
+        ],
+        estado: { $in: ['planificado', 'en transito'] },
+      });
+
+      const haySolapamiento = viajesRelacionados.some((viaje) => {
+        const inicioExistente = DateTime.fromFormat(viaje.inicio_viaje, 'dd/MM/yyyy HH:mm');
+        const finExistente = DateTime.fromFormat(viaje.fin_viaje, 'dd/MM/yyyy HH:mm');
+
+        if (!inicioExistente.isValid || !finExistente.isValid) return false;
+
+        const seSolapan = (
+          inicioExistente < nuevoFin &&
+          finExistente > nuevoInicio
+        );
+
+        return seSolapan && (
+          viaje.chofer_asignado.toString() === chofer_asignado ||
+          viaje.vehiculo_asignado.toString() === vehiculo_asignado
+        );
+      });
+
+      if (haySolapamiento) {
+        return res.status(400).json({ mensaje: 'El chofer o el vehículo ya tienen un viaje en ese horario' });
+      }
+
+      next();
+    } catch (error) {
+      console.error('Error en validarDisponibilidad:', error);
+      res.status(500).json({ mensaje: 'Error al validar disponibilidad del chofer o vehículo' });
+    }
+  };
+};
+
+const validarDepositos = (ViajeModelo) => {
+  return async (req, res, next) => {
+    const {deposito_origen, deposito_destino} = req.body
+    try {
+      if (deposito_origen === deposito_destino){
+        return res.status(409).json({ mensaje: `origen y destino debe ser distinto` });
+      }
+      next();
+    } catch (error) {
+      console.error('Error en validarDeposito:', error);
+      res.status(500).json({ mensaje: 'Error al validar que sean diferentes los depositos' });
+    }
+  }
+}
+
+module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer, validarCuitEmpresa, validarCampoDuplicado, validarVehiculoDeEmpresa, validarDisponibilidad, validarDepositos};

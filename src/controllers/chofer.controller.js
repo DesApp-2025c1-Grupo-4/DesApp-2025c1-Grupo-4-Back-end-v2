@@ -69,19 +69,6 @@ const addChofer = async (req, res) => {
   }
 };
 choferController.addChofer = addChofer;
-/*POST
-const addChofer = async (req,res) => {
-  const choferInf = req.body
-    try{
-      const chofer = new Chofer(choferInf)
-      await chofer.save()
-      res.status(201).json({mensaje : 'El chofer fue agregado correctamente'})
-    } catch {
-      res.status(400).json({mensaje : 'El servidor no puede procesar la solicitud'})
-    }
-}
-choferController.addChofer = addChofer;
-*/
 
 //PUT - Modificacion 
 const updateChofer = async (req, res) => {
