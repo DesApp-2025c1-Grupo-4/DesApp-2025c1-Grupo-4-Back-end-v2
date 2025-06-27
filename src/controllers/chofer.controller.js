@@ -70,6 +70,33 @@ const addChofer = async (req, res) => {
 };
 choferController.addChofer = addChofer;
 
+//GET BY Empresa
+
+const getChoferByEmpresa = async (req, res) => {
+  const { idEmpresa } = req.params;
+  const { active } = req.query;
+
+  try {
+    const choferes = await Chofer.find({
+      empresa: idEmpresa,
+      ...(active && { activo: true })
+    })
+    .populate('empresa', 'nombre_empresa')
+    .populate('vehiculo_defecto', 'patente');
+
+    if (!choferes.length) {
+      return res.status(404).json({ mensaje: 'No se encontraron choferes para esta empresa' });
+    }
+
+    res.status(200).json(choferes);
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al obtener choferes', error: error.message });
+  }
+};
+
+choferController.getChoferByEmpresa = getChoferByEmpresa;
+
+
 //PUT - Modificacion 
 const updateChofer = async (req, res) => {
   try {    
