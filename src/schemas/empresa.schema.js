@@ -1,5 +1,5 @@
 const Joi = require('joi')
-
+const { validarCUIT_CUIL } = require('../middleware/idValidador')
 
 
 // Domicilio schema
@@ -43,12 +43,28 @@ const empresaSchema = Joi.object({
       'string.empty': 'El nombre de la empresa es requerido',
       'any.required': 'El nombre de la empresa es requerido'
   }),
-  cuit: Joi.string().min(11).max(11).required().messages({
-    "any.required":"nombre es requerido",
-    "string.min": "El CUIT debe tener como mínimo {#limit} caracteres",
-    "string.max": "El CUIT debe tener como máximo {#limit} caracteres",
-    "string.empty": "El CUIT no puede ser vacio"
-  }),
+  cuit: Joi.string()
+    .length(11)
+    .pattern(/^\d+$/)
+    .required()
+    .custom((value, helpers) => {
+
+      const prefijosValidos = ['30', '33', '34']; 
+      if (!prefijosValidos.some(pref => value.startsWith(pref))) {
+      return helpers.error('any.invalid', { mensaje: `El CUIT debe comenzar con uno de los prefijos válidos: ${prefijosValidos.join(', ')}` });
+    }
+      const resultado = validarCUIT_CUIL(value);
+      if (!resultado.valido) {
+        return helpers.error('any.invalid', { mensaje: resultado.mensaje });
+      }
+      return value;
+    }, 'validación de CUIT')
+    .messages({
+      'string.length': 'El CUIT debe tener 11 dígitos',
+      'string.pattern.base': 'El CUIT debe contener solo números',
+      'any.invalid': '{{#mensaje}}',
+      'any.required': 'El CUIT es requerido',
+    }),
   activo: Joi.bool(),
   domicilio_fiscal: domicilioFiscalSchema.required().messages({
     'any.required': 'El domicilio fiscal es requerido'

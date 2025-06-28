@@ -214,4 +214,30 @@ const validarDepositos = (ViajeModelo) => {
   }
 }
 
-module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer, validarCuitEmpresa, validarCampoDuplicado, validarVehiculoDeEmpresa, validarDisponibilidad, validarDepositos};
+function validarCUIT_CUIL(numero) {
+  // Verifica que tenga solo números y 11 dígitos
+  if (!/^\d{11}$/.test(numero)) {
+    return { valido: false, mensaje: `${numero} no es válido (formato incorrecto)` };
+  }
+
+  //Validación de dígito final
+  const mult = [5,4,3,2,7,6,5,4,3,2];
+  const nums = numero.split('').map(Number);
+
+  let acc = 0;
+  for (let i = 0; i < 10; i++) {
+    acc += nums[i] * mult[i];
+  }
+
+  const mod = 11 - (acc % 11);
+  const digito = mod === 11 ? 0 : (mod === 10 ? 9 : mod);
+
+  if (digito !== nums[10]) {
+    return { valido: false, mensaje: `${numero} no es válido (dígito verificador incorrecto)` };
+  }
+
+  return { valido: true, mensaje: null };
+}
+
+
+module.exports = {validarId, validarPatenteVehiculo, validarCuilChofer, validarCuitEmpresa, validarCampoDuplicado, validarVehiculoDeEmpresa, validarDisponibilidad, validarDepositos, validarCUIT_CUIL};

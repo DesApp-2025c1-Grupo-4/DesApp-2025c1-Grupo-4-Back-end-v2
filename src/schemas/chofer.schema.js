@@ -1,5 +1,6 @@
 const Joi = require('joi')
 const mongoose = require('mongoose');
+const { validarCUIT_CUIL } = require('../middleware/idValidador')
 
 // Licencias (no se cual es para cada cosa??)
 const TIPO_LICENCIAS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'C3', 'D1', 'D2', 'E'];
@@ -72,12 +73,33 @@ const choferSchema = Joi.object({
     'string.max': 'El apellido no puede exceder los 50 caracteres',
     'any.required': 'El apellido es requerido'
   }),
-  cuil: Joi.string().min(11).max(11).required().messages({
+  cuil: Joi.string()
+    .length(11)
+    .pattern(/^\d+$/)
+    .required()
+    .custom((value, helpers) => {
+      const prefijosValidos = ['20', '23', '24','25','26', '27']; 
+      if (!prefijosValidos.some(pref => value.startsWith(pref))) {
+      return helpers.error('any.invalid', { mensaje: `El CUIL debe comenzar con uno de los prefijos válidos: ${prefijosValidos.join(', ')}` });
+    }
+      const resultado = validarCUIT_CUIL(value);
+      if (!resultado.valido) {
+        return helpers.error('any.invalid', { mensaje: resultado.mensaje });
+      }
+      return value;
+    }, 'validación de CUIL')
+    .messages({
+      'string.length': 'El CUIL debe tener 11 dígitos',
+      'string.pattern.base': 'El CUIL debe contener solo números',
+      'any.invalid': '{{#mensaje}}',
+      'any.required': 'El CUIL es requerido',
+    }),
+  /*cuil: Joi.string().min(11).max(11).required().messages({
     "any.required":"nombre es requerido",
     "string.min": "El CUIL debe tener como mínimo {#limit} caracteres",
     "string.max": "El CUIL debe tener como máximo {#limit} caracteres",
     "string.empty": "El CUIL no puede ser vacio"
-  }),
+  }),*/
   activo: Joi.bool(),
   fecha_nacimiento: Joi.date().max('now').required().messages({
     'date.base': 'Fecha de nacimiento inválida',
