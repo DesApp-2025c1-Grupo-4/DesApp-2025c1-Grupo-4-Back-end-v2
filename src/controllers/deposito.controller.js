@@ -68,7 +68,7 @@ const updateDeposito = async (req, res) => {
       return res.status(404).json({ mensaje: 'Depósito no encontrado' });
     }
 
-    const { tipo, activo, localizacion, personal_contacto, horarios } = req.body;
+    const { tipo, activo, localizacion, personal_contacto, horarios, coordenadas } = req.body;
 
     // Actualizar campos simples si están definidos
     if (typeof tipo !== 'undefined') deposito.tipo = tipo;
@@ -87,6 +87,7 @@ const updateDeposito = async (req, res) => {
     actualizarSubdocumento(deposito.localizacion, localizacion);
     actualizarSubdocumento(deposito.personal_contacto, personal_contacto);
     actualizarSubdocumento(deposito.horarios, horarios);
+    actualizarSubdocumento(deposito.coordenadas, coordenadas);
 
     await deposito.save();
 
