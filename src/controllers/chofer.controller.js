@@ -73,7 +73,7 @@ choferController.addChofer = addChofer;
 //GET BY Empresa
 
 const getChoferByEmpresa = async (req, res) => {
-  const { idEmpresa } = req.params;
+  const idEmpresa = req.id;
   const { active } = req.query;
 
   try {

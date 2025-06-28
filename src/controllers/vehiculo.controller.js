@@ -45,6 +45,29 @@ const getVehiculoByPatente = async (req,res) => {
 };
 vehiculoController.getVehiculoByPatente = getVehiculoByPatente;
 
+//GET BY empresa
+const getVehiculoByEmpresa = async (req, res) => {
+  const idEmpresa = req.id;
+  const { active } = req.query;
+
+  try {
+    const vehiculos = await Vehiculo.find({
+      empresa: idEmpresa,
+      ...(active && { activo: true })
+    })
+    .populate('empresa', 'nombre_empresa');
+
+    if (!vehiculos.length) {
+      return res.status(404).json({ mensaje: 'No se encontraron vehículos para esta empresa' });
+    }
+
+    res.status(200).json(vehiculos);
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al obtener vehículos', error: error.message });
+  }
+};
+
+vehiculoController.getVehiculoByEmpresa = getVehiculoByEmpresa;
 
 //POST
 const addVehiculo = async (req,res) => {

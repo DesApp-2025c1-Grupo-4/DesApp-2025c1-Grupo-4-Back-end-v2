@@ -12,6 +12,6 @@ routes.get('/:_id', validarId(Empresa), empresaController.getEmpresaById)
 routes.get('/:cuit/cuit', validarCuitEmpresa(Empresa), empresaController.getEmpresaByCuit)
 routes.post('/', schemasValidador(empresaSchema), validarCampoDuplicado(Empresa,'cuit', 'empresa', 'una'), validarCampoDuplicado(Empresa, 'nombre_empresa', 'empresa', 'una'), empresaController.addEmpresa)
 routes.put('/:_id', validarId(Empresa), schemasValidador(empresaSchema), validarCampoDuplicado(Empresa, 'cuit', 'empresa', 'una'),validarCampoDuplicado(Empresa, 'nombre_empresa', 'empresa', 'una'), empresaController.updateEmpresa)
-routes.patch('/:_id/delete', empresaController.softDeleteEmpresa)
+routes.patch('/:_id/delete',validarId(Empresa), empresaController.softDeleteEmpresa)
 
 module.exports = routes

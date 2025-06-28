@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { DateTime } = require('luxon');
 
-const validarId = (Modelo) => {
+/*const validarId = (Modelo) => {
     return async (req, res, next) => {
         const { _id } = req.params;
         try {
@@ -16,7 +16,33 @@ const validarId = (Modelo) => {
             res.status(500).json({ error: "Error al buscar id" });
         }
     };
+};*/ 
+
+const validarId = (Modelo) => {
+  return async (req, res, next) => {
+    // Detecta dinámicamente el valor de cualquier campo en req.params
+    const keys = Object.keys(req.params);
+    const idParamName = keys.find((key) => mongoose.Types.ObjectId.isValid(req.params[key]));
+
+    if (!idParamName) {
+      return res.status(400).json({ error: 'ID inválido o ausente en los parámetros' });
+    }
+
+    const value = req.params[idParamName];
+
+    try {
+      const doc = await Modelo.findById(value);
+      if (!doc) {
+        return res.status(404).json({ error: 'ID no encontrada' });
+      }
+      req.id = value;
+      next();
+    } catch (error) {
+      res.status(500).json({ error: 'Error al buscar ID' });
+    }
+  };
 };
+
 
 const validarPatenteVehiculo = (Modelo) => {
     return async (req, res, next) => {

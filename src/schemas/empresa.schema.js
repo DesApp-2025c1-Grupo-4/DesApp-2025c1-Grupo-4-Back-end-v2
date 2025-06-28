@@ -1,5 +1,7 @@
 const Joi = require('joi')
 
+
+
 // Domicilio schema
 const domicilioFiscalSchema = Joi.object({
   direccion: Joi.string().required().messages({
