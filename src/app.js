@@ -23,9 +23,9 @@ const startServer = async () => {
       console.error('No se pudo conectar a ninguna base de datos. Abortando...');
       process.exit(1);
     }
+    await initialEmpresa();//Se ejecuta la semilla solo en local.
   }
   try {
-    await initialEmpresa();
     app.use(routes);
     // Cargar documentación Swagger si existe
     const swaggerPath = path.join(__dirname, 'docs', 'swagger_output.json');
