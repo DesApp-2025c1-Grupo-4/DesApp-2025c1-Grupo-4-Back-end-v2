@@ -1,14 +1,17 @@
 const { Router } = require('express')
 const empresaController = require('../controllers/empresa.controller')
 const { Empresa } = require('../models')
-const empresaSchema = require('../schemas/empresa.schema')
-const { validarCuitEmpresa} = require('../middleware/idValidador')
+const {empresaSchema} = require('../schemas/empresa.schema')
+const { validarId, validarCuitEmpresa, validarCampoDuplicado } = require('../middleware/idValidador')
 const schemasValidador = require('../middleware/schemasValidador')
 
 const routes = Router()
 
-routes.get('/',empresaController.getEmpresas)
-routes.get('/:cuit',validarCuitEmpresa(Empresa),empresaController.getEmpresaByCuit)
-routes.post('/',schemasValidador(empresaSchema),empresaController.addEmpresa)
+routes.get('/', empresaController.getEmpresas)
+routes.get('/:_id', validarId(Empresa), empresaController.getEmpresaById)
+routes.get('/:cuit/cuit', validarCuitEmpresa(Empresa), empresaController.getEmpresaByCuit)
+routes.post('/', schemasValidador(empresaSchema), validarCampoDuplicado(Empresa,'cuit', 'empresa', 'una'), validarCampoDuplicado(Empresa, 'nombre_empresa', 'empresa', 'una'), empresaController.addEmpresa)
+routes.put('/:_id', validarId(Empresa), schemasValidador(empresaSchema), validarCampoDuplicado(Empresa, 'cuit', 'empresa', 'una'),validarCampoDuplicado(Empresa, 'nombre_empresa', 'empresa', 'una'), empresaController.updateEmpresa)
+routes.patch('/:_id/delete',validarId(Empresa), empresaController.softDeleteEmpresa)
 
 module.exports = routes

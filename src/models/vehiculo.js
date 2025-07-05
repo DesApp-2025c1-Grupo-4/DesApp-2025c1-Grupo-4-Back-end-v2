@@ -1,48 +1,53 @@
 const mongoose = require('mongoose')
 const {Schema} = require('mongoose')
 
-const vehiculoSchema = new mongoose.Schema({
-    patente: {
-        type: Schema.Types.String,
-        required: true,
-        unique: true
-    },
-    marca: {
-        type: Schema.Types.String,
-        required: true
-    },
-    modelo: {
-        type: Schema.Types.String,
-        required: true
-    },
-    año: {
-        type: Schema.Types.BigInt,
-        required: true
-    },
-    volumen: {
-        type: Schema.Types.Double,
-        required: true
-    },
-    peso: {
-        type: Schema.Types.Double,
-        required: true
-    },
-    tipoVehiculo: {
-        type: Schema.Types.String,
-        required: true
-    }
-},{
-  collection: 'Vehiculo', // Especifica el nombre en singular
-})
+const capacidadCargaSchema = new Schema({
+  volumen: { type: Number, required: true },
+  peso: { type: Number, required: true }
+},
+{ versionKey: false });
 
-vehiculoSchema.set('toJSON', {
-    transform: (_, ret) => {
-        delete ret.__v;
-        if(ret.año !== undefined){
-            // necesario para evitar error de serialización, solución sin modificar esquema.
-            ret.año = ret.año.toString();
-        }
-    }
-})
+const vehiculoSchema = new Schema({
+  empresa: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'Empresa', 
+    required: true 
+  },
+  patente: { 
+    type: String, 
+    required: true,
+    unique: true,
+    uppercase: true,
+  },
+  marca: { 
+    type: String, 
+    required: true 
+  },
+  modelo: { 
+    type: String, 
+    required: true 
+  },
+  anio: { 
+    type: Number, 
+    required: true,
+    min: 1900,
+    max: new Date()
+  },
+  capacidad_carga: {
+    type: capacidadCargaSchema,
+    required: true
+  },
+  tipo_vehiculo: { 
+    type: String, 
+    required: true,
+    enum: ['Camión', 'Furgón', 'Camioneta', "Auto", 'Otros']
+  },
+  activo: {
+    type: Boolean,
+    required: true
+  },
+},
+{ versionKey: false });
+
 
 module.exports = mongoose.model('Vehiculo', vehiculoSchema);
