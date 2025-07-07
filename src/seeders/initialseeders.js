@@ -291,7 +291,17 @@ async function SeedDatabase() {
             estado: 'planificado',
             empresa_asignada: empresas[0]._id,
             chofer_asignado: choferes[0]._id,
-            vehiculo_asignado: vehiculos[0]._id
+            vehiculo_asignado: vehiculos[0]._id,
+            historial_estados: [
+                {
+                estado: 'planificado',
+                fecha: '15/06/2023 08:00'
+                },
+                {
+                estado: 'en transito',
+                fecha: '15/06/2023 08:10'
+                }
+            ]
             }
         ];
 

@@ -11,6 +11,7 @@ routes.get('/', viajeController.getViajes)
 routes.post('/', schemasValidador(viajeSchema),validarDepositos(Viaje),validarDisponibilidad(Viaje),viajeController.addViaje)
 routes.get('/:_id', validarId(Viaje), viajeController.getViajeById)
 routes.put('/:_id', validarId(Viaje), schemasValidador(viajeSchema), viajeController.updateViaje)
-routes.patch('/:_id/estado', schemasValidador(viajeSchema), viajeController.updateViajeState)
+routes.patch('/:_id/estado', validarId(Viaje), viajeController.updateViajeState);
+routes.get('/:id/historial', viajeController.getHistorialEstados);
 
 module.exports = routes

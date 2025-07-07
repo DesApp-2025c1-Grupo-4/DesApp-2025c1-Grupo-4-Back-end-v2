@@ -73,10 +73,23 @@ const viajeSchema = Joi.object({
     .messages({
       'any.invalid': 'ID de vehículo inválido',
       'any.required': 'El vehículo asignado es requerido'
+    }),
+  historial_estados: Joi.array().items(
+    Joi.object({
+      estado: Joi.string()
+        .valid(...ESTADO_VIAJE)
+        .required()
+        .messages({
+          'any.only': `El estado del historial debe ser uno de: ${ESTADO_VIAJE.join(', ')}`,
+          'any.required': 'El estado del historial es requerido'
+        }),
+      fecha: dateTimeValidation.required().messages({
+        'any.required': 'La fecha del historial es requerida'
+      })
     })
+  )
 });
 
-// Update schema 
 const viajeUpdateSchema = viajeSchema.fork(
   [
     'deposito_origen',
