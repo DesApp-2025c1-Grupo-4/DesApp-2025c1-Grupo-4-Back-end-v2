@@ -112,7 +112,7 @@ const validarCampoDuplicado = (Modelo, campo, nombreEntidad, articulo) => {
       const existe = await Modelo.findOne(filtro);
 
       if (existe) {
-        return res.status(409).json({ mensaje: `Ya existe ${articulo} ${nombreEntidad} con ese ${campo.toUpperCase()}` });
+        return res.status(409).json({ mensaje: `Ya existe ${articulo} ${nombreEntidad} con ese ${campo}` });
       }
 
       next();
