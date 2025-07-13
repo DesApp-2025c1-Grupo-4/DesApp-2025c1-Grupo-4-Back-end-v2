@@ -103,18 +103,22 @@ depositoController.updateDeposito = updateDeposito;
 
 //PATCH - Baja Logica
 const softDeleteDeposito = async (req, res) => {
- try {
-    const { id } = req.params;
+  try {
+    const { _id } = req.params;
     
     const deposito = await Deposito.findOneAndUpdate(
-      { id },
-      {  $set: { activo: false } }
+      { _id },
+      { $set: { activo: false } },
+      { new: true } 
     );
 
     if (!deposito) {
       return res.status(404).json({ message: 'Depósito no encontrado' });
     }
-    res.status(200).json({message: 'Depósito borrado exitosamente.'});
+    res.status(200).json({
+      message: 'Depósito borrado exitosamente.',
+      deposito: deposito
+    });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
